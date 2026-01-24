@@ -24,7 +24,7 @@ class PlaceOrder(APIView):
         payment_mode = request.data.get("payment_mode", "stripe")
 
         # 🔐 ACTIVE CART
-        #cart = Cart.objects.get(user=request.user, status="ACTIVE")
+       # cart = Cart.objects.get(user=request.user, status="ACTIVE")
         
         cart = Cart.objects.filter(
         user=request.user,
@@ -40,6 +40,7 @@ class PlaceOrder(APIView):
                    status=400
                )
         print(cart)
+       
         # 🧮 CALCULATIONS
         subtotal = Decimal("0.00")
         cart_items_snapshot = []

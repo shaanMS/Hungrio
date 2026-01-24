@@ -921,7 +921,7 @@ function showPaymentSuccessModal(paymentData) {
         document.body.style.transition = 'opacity 0.5s ease';
         
         setTimeout(() => {
-          window.location.href = "/order-status/{orderId}";
+          window.location.href = `/order-status/${orderId}`;
         }, 500);
       });
     }
@@ -936,7 +936,7 @@ function showPaymentSuccessModal(paymentData) {
     // Auto-redirect after 15 seconds
     const autoRedirect = setTimeout(() => {
       closePaymentSuccessModal();
-      window.location.href = "/order-status/{orderId}";
+      window.location.href = `/order-status/${orderId}`;
     }, 15000);
     
     // Store timeout for cleanup
@@ -1236,6 +1236,7 @@ placeOrderBtn.addEventListener("click", async () => {
   const data = await res.json();
   clientSecret = data.client_secret;
   orderId = data.orderId;
+  alert(orderId)
   initStripeUI();
 });
 

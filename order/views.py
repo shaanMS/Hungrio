@@ -6,7 +6,7 @@ from django.http import HttpResponse ,JsonResponse
 from rest_framework.views import APIView
 
 class OrderStatusView(APIView):
- #   permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, order_id):
         try:

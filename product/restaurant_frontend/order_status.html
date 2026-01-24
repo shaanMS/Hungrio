@@ -31,56 +31,57 @@
 <div class="card">
     <h2>🧾 Order Status</h2>
 
-    <p><b>Order ID:</b> <span id="orderId">123</span></p>
-
+    <p><b>Order ID:</b> <span id="orderIdText"></span></p>
     <p id="statusText">Checking status...</p>
 
     <button onclick="checkStatus()">🔄 Refresh</button>
 </div>
 
+<script src="/static/js/api.js"></script>
 <script>
-    const orderId = 123; // 🔁 dynamically set karo
-    const token = "PASTE_JWT_TOKEN_HERE"; // 🔐 user ka access token
+    // ✅ URL se UUID uthao
+    // example: /orders/status.html?order_id=552d4e1e-...
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("order_id");
+
+    document.getElementById("orderIdText").innerText = orderId;
 
     let pollingInterval = null;
 
     async function checkStatus() {
-        document.getElementById("statusText").innerText = "Checking status...";
+        const statusEl = document.getElementById("statusText");
+        statusEl.innerText = "Checking status...";
 
         try {
-            const response = await fetch(`/api/orders/status/${orderId}/`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                }
-            });
+            const response = await apiFetch(
+                `/api/orders/status/${orderId}/`,
+                { method: "GET" }
+            );
 
             const data = await response.json();
-
             handleResponse(response.status, data);
 
-        } catch (error) {
-            document.getElementById("statusText").innerText =
-                "❌ Network error. Try again.";
+        } catch (err) {
+            statusEl.className = "failed";
+            statusEl.innerText = "❌ Network error. Try again.";
         }
     }
 
     function handleResponse(statusCode, data) {
         const statusEl = document.getElementById("statusText");
 
+        // ⏳ Stripe webhook delay case
         if (statusCode === 202 && data.status === "processing") {
             statusEl.className = "processing";
             statusEl.innerText = "⏳ Payment is processing...";
 
-            // auto polling start
             if (!pollingInterval) {
                 pollingInterval = setInterval(checkStatus, 5000);
             }
             return;
         }
 
-        // stop polling
+        // 🛑 stop polling once final
         if (pollingInterval) {
             clearInterval(pollingInterval);
             pollingInterval = null;
@@ -88,23 +89,28 @@
 
         if (data.status === "failed") {
             statusEl.className = "failed";
-            statusEl.innerText = "❌ Payment Failed";
+            statusEl.innerText = "❌ Payment Failed. Refund if deducted.";
             return;
         }
 
         if (data.status === "success") {
             statusEl.className = "success";
             statusEl.innerHTML = `
-                ✅ Order Confirmed <br>
-                💳 Payment ID: ${data.payment_id} <br>
-                💰 Amount: ₹${data.amount} <br>
+                ✅ <b>Order Confirmed</b><br>
+                💳 Payment ID: ${data.payment_id}<br>
+                💰 Amount: ₹${data.amount}<br>
                 🧾 Invoice: ${data.invoice_available ? "Available" : "Generating..."}
             `;
         }
     }
 
-    // page load par auto check
-    checkStatus();
+    // 🚀 auto start
+    if (orderId) {
+        checkStatus();
+    } else {
+        document.getElementById("statusText").innerText =
+            "❌ Invalid order link";
+    }
 </script>
 
 </body>

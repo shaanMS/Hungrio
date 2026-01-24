@@ -4,7 +4,7 @@ from .views import OrderStatusView
 
 urlpatterns = [
     path(
-        "status/<int:order_id>/",
+        "status/<uuid:order_id>/",
         OrderStatusView.as_view(),
         name="order-status"
     ),
