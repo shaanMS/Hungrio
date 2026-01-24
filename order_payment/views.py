@@ -25,7 +25,7 @@ class PlaceOrder(APIView):
 
         # 🔐 ACTIVE CART
        # cart = Cart.objects.get(user=request.user, status="ACTIVE")
-        
+        print('---------------------------------')
         cart = Cart.objects.filter(
         user=request.user,
         status="ACTIVE"

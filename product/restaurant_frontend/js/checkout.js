@@ -1049,7 +1049,7 @@ payBtn.addEventListener("click", async () => {
       
       // Mark payment section as completed
       paymentSection.classList.add('payment-completed');
-      
+      /*
       // Send success notification to server (optional)
       try {
         await apiFetch(`${API_BASE}/api/order-payment/payment-success/`, {
@@ -1065,6 +1065,7 @@ payBtn.addEventListener("click", async () => {
       } catch (error) {
         console.log("Payment success notification failed, but payment was successful");
       }
+        */
     }
   } catch (error) {
     showPaymentProcessingModal(false);
@@ -1235,7 +1236,7 @@ placeOrderBtn.addEventListener("click", async () => {
 
   const data = await res.json();
   clientSecret = data.client_secret;
-  orderId = data.orderId;
+  orderId = data.order_id;
   alert(orderId)
   initStripeUI();
 });

@@ -18,7 +18,7 @@ urlpatterns = [
     path("wishlist/", TemplateView.as_view(template_name="wishlist.html")),
     path("checkout/", checkout_view, name="checkout"),   # ✅ FIXED
     path(
-    "order-status/",
+    "order-status/<uuid:order_id>/",
     TemplateView.as_view(template_name="order_status.html"),
     name="order_status"
 ),
