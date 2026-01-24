@@ -2,7 +2,10 @@
 __pycache__/
 *.pyc
 *.pyo
-
+important_cmds.txt
+*.key
+*.secret
+.env
 # Django
 db.sqlite3
 staticfiles/
