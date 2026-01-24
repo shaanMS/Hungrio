@@ -1,5 +1,5 @@
 const API_BASE = "http://127.0.0.1:2222";
-var orderId = null;
+const orderId = null;
 // DOM Elements
 const orderItemsEl = document.getElementById("order-items");
 const grandTotalEl = document.getElementById("grand-total");
@@ -922,7 +922,7 @@ function showPaymentSuccessModal(paymentData) {
         
         setTimeout(() => {
           window.location.href = "/order-status/{orderId}";
-        }, 500);
+        }, 10000);
       });
     }
     
@@ -1235,7 +1235,9 @@ placeOrderBtn.addEventListener("click", async () => {
 
   const data = await res.json();
   clientSecret = data.client_secret;
-  orderId = data.orderId;
+  orderId = data.order_id;
+  alert(orderId)
+
   initStripeUI();
 });
 

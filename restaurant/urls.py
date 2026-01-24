@@ -19,8 +19,8 @@ urlpatterns = [
     path("checkout/", checkout_view, name="checkout"),   # ✅ FIXED
     path(
     "order-status/<id>",
-    TemplateView.as_view(template_name="order_success.html"),
-    name="order_success"
+    TemplateView.as_view(template_name="order_status.html"),
+    name="order_status"
 ),
 
     # ---------- AUTH APIs ----------
@@ -34,8 +34,10 @@ urlpatterns = [
     path('api/products/', include('product.urls')),
     path('api/cart/', include('cart.urls')),
     path("api/wishlist/", include("wishlist.urls")),
-
+    path("api/orders/", include("order.urls")),
 ]
+
+
 
 
 
