@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Restaurant</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<header>
+  <h2>🍽 Restaurant</h2>
+
+  <span id="user-status">Guest</span>
+  
+  <button onclick="logout()">Logout</button>
+  <a href="/login">Login</a>
+   
+  <button>🛒 Cart (<span id="cart-count">0</span>)<a href="/cart/">🛒 View Cart</a></button>
+</header>
+
+<hr>
+
+<div id="product-list"></div>
+
+<script src="/static/js/api.js"></script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>

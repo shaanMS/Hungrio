@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Restaurant - Menu</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍽</text></svg>">
+  
+  <style>
+    :root {
+      --primary-yellow: #FFD166;
+      --primary-red: #EF476F;
+      --primary-green: #06D6A0;
+      --primary-blue: #118AB2;
+      --primary-purple: #8338EC;
+      --background: #FFFCF9;
+      --card-bg: #FFFFFF;
+      --text-dark: #073B4C;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      --cartoon-border: 4px solid var(--text-dark);
+      --font-cartoon: 'Comic Neue', cursive, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-cartoon);
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      background-attachment: fixed;
+      color: var(--text-dark);
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Subtle background pattern */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(255, 209, 102, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 85% 30%, rgba(239, 71, 111, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 50% 80%, rgba(6, 214, 160, 0.1) 0%, transparent 20%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Enhanced Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--primary-red) 100%);
+      border-radius: 20px;
+      border: var(--cartoon-border);
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.3) 10px, rgba(255, 255, 255, 0.3) 20px);
+      z-index: 0;
+      border-radius: 25px;
+    }
+
+    header h2 {
+      font-size: 2.5rem;
+      color: white;
+      text-shadow: 3px 3px 0 var(--text-dark);
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 1;
+    }
+
+    #user-status {
+      background-color: white;
+      padding: 10px 20px;
+      border-radius: 50px;
+      border: var(--cartoon-border);
+      font-weight: bold;
+      font-size: 1.2rem;
+      box-shadow: 3px 3px 0 var(--text-dark);
+      transition: all 0.2s;
+      min-width: 120px;
+      text-align: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .cartoon-btn {
+      padding: 12px 24px;
+      border: var(--cartoon-border);
+      border-radius: 50px;
+      font-family: var(--font-cartoon);
+      font-weight: bold;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 3px 3px 0 var(--text-dark);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      backdrop-filter: blur(5px);
+    }
+
+    .cartoon-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 var(--text-dark);
+    }
+
+    .cartoon-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 2px 2px 0 var(--text-dark);
+    }
+
+    .logout-btn {
+      background-color: var(--primary-red);
+      color: white;
+      display: none;
+    }
+
+    .login-btn {
+      background-color: var(--primary-blue);
+      color: white;
+      display: none;
+    }
+
+    .wishlist-btn-nav {
+      background-color: var(--primary-purple);
+      color: white;
+    }
+
+    .cart-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cart-btn {
+      background-color: var(--primary-green);
+      color: white;
+      position: relative;
+      padding: 12px 24px 12px 50px;
+    }
+
+    #cart-count {
+      background-color: var(--primary-purple);
+      color: white;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px var(--text-dark);
+    }
+
+    .cart-view-link {
+      background-color: var(--primary-purple);
+      color: white;
+    }
+
+    hr {
+      border: none;
+      height: 6px;
+      background-color: var(--text-dark);
+      border-radius: 3px;
+      margin: 30px 0;
+      box-shadow: 3px 3px 0 var(--primary-yellow);
+      opacity: 0.8;
+    }
+
+    /* Products Container - Highlighted */
+    #product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .product-card {
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      border: var(--cartoon-border);
+      padding: 25px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 0 0 2px var(--primary-yellow) inset;
+      background-color: white;
+    }
+
+    .product-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background: linear-gradient(90deg, 
+        var(--primary-yellow), 
+        var(--primary-red), 
+        var(--primary-green), 
+        var(--primary-blue), 
+        var(--primary-purple));
+      background-size: 200% 100%;
+      animation: gradientShift 3s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .product-name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      line-height: 1.3;
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    .wishlist-btn {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+      filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));
+    }
+
+    .wishlist-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .product-category {
+      display: inline-block;
+      background-color: rgba(255, 209, 102, 0.9);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+      border: 2px solid var(--text-dark);
+      backdrop-filter: blur(5px);
+    }
+
+    .product-description {
+      color: #555;
+      margin-bottom: 20px;
+      line-height: 1.5;
+      min-height: 60px;
+      padding: 10px;
+      background: rgba(245, 245, 245, 0.7);
+      border-radius: 10px;
+      border-left: 3px solid var(--primary-blue);
+    }
+
+    .product-price {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      border: 2px solid rgba(239, 71, 111, 0.3);
+    }
+
+    .final-price {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-red);
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .original-price {
+      font-size: 1.2rem;
+      color: #999;
+      text-decoration: line-through;
+      margin-right: 10px;
+    }
+
+    .veg-indicator {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--text-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .veg {
+      background: linear-gradient(135deg, var(--primary-green), #00b894);
+      color: white;
+    }
+
+    .non-veg {
+      background: linear-gradient(135deg, var(--primary-red), #d63031);
+      color: white;
+    }
+
+    .add-to-cart-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+      color: white;
+      border: var(--cartoon-border);
+      border-radius: 50px;
+      font-family: var(--font-cartoon);
+      font-weight: bold;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 3px 3px 0 var(--text-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .add-to-cart-btn:hover {
+      background: linear-gradient(135deg, var(--primary-purple), var(--primary-blue));
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 var(--text-dark);
+    }
+
+    .add-to-cart-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 2px 2px 0 var(--text-dark);
+    }
+
+    .add-to-cart-btn::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: rotate(30deg);
+      transition: all 0.3s;
+    }
+
+    .add-to-cart-btn:hover::after {
+      left: 100%;
+    }
+
+    .discount-badge {
+      position: absolute;
+      top: 15px;
+      right: -30px;
+      background: linear-gradient(135deg, var(--primary-red), #d63031);
+      color: white;
+      padding: 8px 35px;
+      transform: rotate(45deg);
+      font-weight: bold;
+      border: 2px solid white;
+      box-shadow: 0 0 0 2px var(--text-dark);
+      z-index: 1;
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--primary-green), #00b894);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 15px;
+      border: var(--cartoon-border);
+      box-shadow: var(--shadow);
+      display: none;
+      z-index: 1000;
+      font-weight: bold;
+      animation: bounceIn 0.5s;
+      backdrop-filter: blur(10px);
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .page-btn {
+      padding: 10px 20px;
+      border: var(--cartoon-border);
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--primary-yellow), #ff9f43);
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-cartoon);
+      backdrop-filter: blur(5px);
+    }
+
+    .page-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+      color: white;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .current-page {
+      font-weight: bold;
+      font-size: 1.2rem;
+      padding: 5px 15px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50px;
+      border: var(--cartoon-border);
+      backdrop-filter: blur(5px);
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      70% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Loading State */
+    .loading {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 20px;
+      border: var(--cartoon-border);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--primary-yellow);
+      border-top: 5px solid var(--primary-red);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Empty State */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 20px;
+      border: var(--cartoon-border);
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .header-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      #product-list {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h2 {
+        font-size: 2rem;
+      }
+      
+      #product-list {
+        grid-template-columns: 1fr;
+      }
+      
+      .cartoon-btn {
+        padding: 10px 15px;
+        font-size: 1rem;
+      }
+      
+      .cart-section {
+        flex-direction: column;
+      }
+      
+      body {
+        padding: 10px;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+  <h2>🍽 Restaurant</h2>
+
+  <div class="header-controls">
+    <span id="user-status">Guest</span>
+    
+    <!-- Logout Button - Only shown when user is logged in -->
+    <button onclick="logout()" class="cartoon-btn logout-btn">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+    
+    <!-- Login Button - Only shown when user is logged out -->
+    <a href="/login" class="cartoon-btn login-btn">
+      <i class="fas fa-sign-in-alt"></i> Login
+    </a>
+    
+    <!-- Wishlist Button -->
+    <a href="/wishlist/" class="cartoon-btn wishlist-btn-nav">
+      <i class="fas fa-heart"></i> Wishlist
+    </a>
+    
+    <div class="cart-section">
+      <button class="cartoon-btn cart-btn">
+        <i class="fas fa-shopping-cart"></i> Cart 
+        <span id="cart-count">0</span>
+      </button>
+      
+      <a href="/cart/" class="cartoon-btn cart-view-link">
+        <i class="fas fa-external-link-alt"></i> View Cart
+      </a>
+    </div>
+  </div>
+</header>
+
+<hr>
+
+<div id="product-list">
+  <div class="loading">
+    <div class="spinner"></div>
+    <p>Loading delicious dishes...</p>
+  </div>
+</div>
+
+<div id="pagination" class="pagination" style="display: none;">
+  <button id="prev-btn" class="page-btn" onclick="loadPreviousPage()">
+    <i class="fas fa-chevron-left"></i> Previous
+  </button>
+  <span id="current-page" class="current-page">Page 1</span>
+  <button id="next-btn" class="page-btn" onclick="loadNextPage()">
+    Next <i class="fas fa-chevron-right"></i>
+  </button>
+</div>
+
+<div id="notification" class="notification"></div>
+
+<script>
+  // API Configuration
+  const API_BASE = 'http://192.168.29.185:2222';
+  
+  // Global variables
+  let currentPage = 1;
+  let nextPageUrl = null;
+  let previousPageUrl = null;
+  let userWishlist = new Set(); // Store wishlisted product IDs
+  let isLoggedIn = false;
+
+  // DOM Elements
+  const userStatus = document.getElementById('user-status');
+  const logoutBtn = document.querySelector('.logout-btn');
+  const loginBtn = document.querySelector('.login-btn');
+  const productList = document.getElementById('product-list');
+  const pagination = document.getElementById('pagination');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const currentPageSpan = document.getElementById('current-page');
+
+  // API Fetch helper with auth
+  function apiFetch(url, options = {}) {
+    const token = localStorage.getItem("access");
+    const headers = options.headers || {};
+    
+    if (token) {
+      headers["Authorization"] = "Bearer " + token;
+    }
+    
+    // Add CSRF token for Django
+    const csrfToken = getCookie('csrftoken');
+    if (csrfToken && (options.method === 'POST' || options.method === 'PUT' || options.method === 'DELETE')) {
+      headers["X-CSRFToken"] = csrfToken;
+    }
+
+    return fetch(url, {
+      ...options,
+      headers,
+      credentials: 'include'
+    });
+  }
+
+  // Helper to get CSRF token
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', initialize);
+
+  async function initialize() {
+    await checkAuthStatus();
+    if (isLoggedIn) {
+      await loadUserWishlist();
+    }
+    await loadProducts();
+    await loadCart();
+  }
+
+  // Check authentication status
+  async function checkAuthStatus() {
+    try {
+      const res = await apiFetch(`${API_BASE}/api/auth/me/`);
+      if (res.ok) {
+        const data = await res.json();
+        userStatus.textContent = data.username || 'User';
+        userStatus.style.backgroundColor = '#FFD166';
+        logoutBtn.style.display = 'flex';
+        loginBtn.style.display = 'none';
+        isLoggedIn = true;
+      } else {
+        throw new Error('Not authenticated');
+      }
+    } catch (error) {
+      userStatus.textContent = 'Guest';
+      userStatus.style.backgroundColor = '#FFFFFF';
+      logoutBtn.style.display = 'none';
+      loginBtn.style.display = 'flex';
+      isLoggedIn = false;
+    }
+  }
+
+  // Load user's wishlist
+  async function loadUserWishlist() {
+    if (!isLoggedIn) return;
+    
+    try {
+      const res = await apiFetch(`${API_BASE}/api/wishlist/`);
+      if (res.ok) {
+        const data = await res.json();
+        // Clear existing wishlist
+        userWishlist.clear();
+        // Add product IDs to wishlist set
+        if (data.data && Array.isArray(data.data)) {
+          data.data.forEach(item => {
+            if (item.product && item.product.id) {
+              userWishlist.add(item.product.id);
+            }
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error loading wishlist:', error);
+    }
+  }
+
+  // Toggle wishlist status
+  async function toggleWishlist(productId) {
+    if (!isLoggedIn) {
+      showNotification('Please login to add items to wishlist', 'error');
+      return;
+    }
+
+    const wishlistBtn = document.querySelector(`.wishlist-btn[onclick="toggleWishlist(${productId})"]`);
+    const isWishlisted = userWishlist.has(productId);
+
+    try {
+      if (isWishlisted) {
+        // Remove from wishlist
+        const res = await apiFetch(`${API_BASE}/api/wishlist/`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ product: productId })
+        });
+
+        if (res.ok) {
+          userWishlist.delete(productId);
+          wishlistBtn.innerHTML = '🤍';
+          wishlistBtn.title = 'Add to wishlist';
+          showNotification('Removed from wishlist');
+        } else {
+          throw new Error('Failed to remove from wishlist');
+        }
+      } else {
+        // Add to wishlist
+        const res = await apiFetch(`${API_BASE}/api/wishlist/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ product: productId })
+        });
+
+        if (res.ok) {
+          userWishlist.add(productId);
+          wishlistBtn.innerHTML = '❤️';
+          wishlistBtn.title = 'Remove from wishlist';
+          showNotification('Added to wishlist!');
+        } else {
+          throw new Error('Failed to add to wishlist');
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling wishlist:', error);
+      showNotification('Failed to update wishlist', 'error');
+    }
+  }
+
+  // Load products from API
+  async function loadProducts(pageUrl = `${API_BASE}/api/products/`) {
+    try {
+      productList.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading delicious dishes...</p></div>';
+
+      const res = await fetch(pageUrl);
+      const data = await res.json();
+
+      // Store pagination URLs
+      nextPageUrl = data.next;
+      previousPageUrl = data.previous;
+      
+      // Update pagination controls
+      updatePaginationControls();
+
+      // Check if there are products
+      if (!data.results || data.results.length === 0) {
+        productList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🍽</div>
+            <h3>No dishes available</h3>
+            <p>Check back soon for our delicious menu!</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Generate product cards
+      let productsHTML = '';
+      
+      data.results.forEach(p => {
+        const discount = parseFloat(p.discount_percentage);
+        const hasDiscount = discount > 0;
+        const basePrice = parseFloat(p.base_price);
+        const finalPrice = parseFloat(p.final_price);
+        const isWishlisted = userWishlist.has(p.id);
+        
+        productsHTML += `
+          <div class="product-card">
+            ${hasDiscount ? `<div class="discount-badge">${discount}% OFF</div>` : ''}
+            
+            <div class="product-header">
+              <h3 class="product-name">${p.name}</h3>
+              <button class="wishlist-btn" onclick="toggleWishlist(${p.id})" title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}">
+                ${isWishlisted ? '❤️' : '🤍'}
+              </button>
+            </div>
+            
+            <div class="product-category">${p.category_name} • ${p.subcategory_name}</div>
+            
+            <p class="product-description">${p.description || 'A delicious dish from our kitchen!'}</p>
+            
+            <div class="product-price">
+              <div>
+                ${hasDiscount ? `<span class="original-price">₹${basePrice.toFixed(2)}</span>` : ''}
+                <span class="final-price">₹${finalPrice.toFixed(2)}</span>
+              </div>
+              <div class="veg-indicator ${p.is_veg ? 'veg' : 'non-veg'}">
+                ${p.is_veg ? '🥬' : '🍗'}
+              </div>
+            </div>
+            
+            <button class="add-to-cart-btn" onclick="addToCart(${p.id})">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        `;
+      });
+      
+      productList.innerHTML = productsHTML;
+      
+    } catch (error) {
+      console.error('Error loading products:', error);
+      productList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">⚠️</div>
+          <h3>Connection Error</h3>
+          <p>Unable to load products. Please check your connection.</p>
+          <button onclick="loadProducts()" class="cartoon-btn" style="margin-top: 20px;">
+            <i class="fas fa-redo"></i> Try Again
+          </button>
+        </div>
+      `;
+    }
+  }
+
+  // Update pagination controls
+  function updatePaginationControls() {
+    if (nextPageUrl || previousPageUrl) {
+      pagination.style.display = 'flex';
+      prevBtn.disabled = !previousPageUrl;
+      nextBtn.disabled = !nextPageUrl;
+      currentPageSpan.textContent = `Page ${currentPage}`;
+    } else {
+      pagination.style.display = 'none';
+    }
+  }
+
+  // Load next page
+  function loadNextPage() {
+    if (nextPageUrl) {
+      currentPage++;
+      loadProducts(nextPageUrl);
+    }
+  }
+
+  // Load previous page
+  function loadPreviousPage() {
+    if (previousPageUrl) {
+      currentPage--;
+      loadProducts(previousPageUrl);
+    }
+  }
+
+  // Add to cart
+  async function addToCart(id) {
+    if (!isLoggedIn) {
+      showNotification('Please login to add items to cart', 'error');
+      return;
+    }
+
+    try {
+      const res = await apiFetch(`${API_BASE}/api/cart/cart/add_item/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ product: id, quantity: 1 })
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.detail || 'Failed to add to cart');
+      }
+
+      showNotification("Added to cart!", "success");
+      loadCart();
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      showNotification(error.message || "Failed to add to cart", "error");
+    }
+  }
+
+  // Load cart count
+  async function loadCart() {
+    try {
+      const res = await apiFetch(`${API_BASE}/api/cart/cart/list_items/`);
+      if (!res.ok) return;
+
+      const data = await res.json();
+
+      let totalQty = 0;
+      if (data.items && data.items.length > 0) {
+        data.items.forEach(item => {
+          totalQty += item.quantity;
+        });
+      }
+
+      document.getElementById("cart-count").innerText = totalQty;
+    } catch (error) {
+      console.error('Error loading cart:', error);
+    }
+  }
+
+  // Show notification
+  function showNotification(message, type = "info") {
+    const notification = document.getElementById("notification");
+    notification.innerText = message;
+    notification.style.display = 'block';
+    
+    // Set color based on type
+    if (type === "error") {
+      notification.style.background = "linear-gradient(135deg, var(--primary-red), #d63031)";
+    } else if (type === "success") {
+      notification.style.background = "linear-gradient(135deg, var(--primary-green), #00b894)";
+    } else {
+      notification.style.background = "linear-gradient(135deg, var(--primary-blue), var(--primary-purple))";
+    }
+    
+    setTimeout(() => {
+      notification.style.display = 'none';
+    }, 3000);
+  }
+
+  // Logout function
+  function logout() {
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    location.reload();
+  }
+</script>
+
+</body>
+</html>

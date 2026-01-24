@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart</title>
+</head>
+<body>
+
+<h2>Add to Cart</h2>
+
+<input type="number" id="product" placeholder="Product ID">
+<input type="number" id="quantity" value="1">
+<button onclick="addItem()">Add</button>
+
+<hr>
+
+<h2>Cart Items</h2>
+<table border="1" id="cart-table"></table>
+
+<script>
+const csrftoken = "{{ csrf_token }}";
+
+function loadCart() {
+    fetch("/api/cart/cart/list_items/")
+        .then(res => res.json())
+        .then(data => {
+            let table = `
+                <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Action</th>
+                </tr>
+            `;
+
+            data.items.forEach(item => {
+                table += `
+                    <tr>
+                        <td>${item.product_name}</td>
+                        <td>${item.quantity}</td>
+                        <td>
+                            <button onclick="removeItem(${item.product})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById("cart-table").innerHTML = table;
+        });
+}
+
+function addItem() {
+    fetch("/api/cart/cart/add_item/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({
+            product: document.getElementById("product").value,
+            quantity: document.getElementById("quantity").value
+        })
+    }).then(() => loadCart());
+}
+
+function removeItem(productId) {
+    fetch("/api/cart/cart/remove_item/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({ product: productId })
+    }).then(() => loadCart());
+}
+
+loadCart();
+</script>
+
+</body>
+</html>

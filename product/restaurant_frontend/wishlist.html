@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>❤️ My Wishlist - Restaurant</title>
+  <style>
+    :root {
+      --pink: #FF6B8B;
+      --orange: #FF9A3D;
+      --yellow: #FFD93D;
+      --lime: #6BCF7F;
+      --blue: #4D96FF;
+      --purple: #9D4EDD;
+      --magenta: #FF4D8D;
+      --cyan: #36D1DC;
+      --red: #FF4757;
+      --green: #2ED573;
+      --dark: #2C3A47;
+      --white: #FFFFFF;
+      --border-thick: 5px solid #000000;
+      --border-medium: 3px solid #000000;
+      --shadow-big: 8px 8px 0 #000000;
+      --shadow-small: 4px 4px 0 #000000;
+      --font-cartoon: 'Comic Neue', 'Comic Sans MS', cursive;
+      --radius-big: 25px;
+      --radius-medium: 15px;
+      --radius-small: 10px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-cartoon);
+      background-color: #FFF9E6;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Header */
+    .wishlist-header {
+      background-color: var(--pink);
+      padding: 25px 30px;
+      border-radius: var(--radius-big);
+      border: var(--border-thick);
+      margin-bottom: 25px;
+      box-shadow: var(--shadow-big);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wishlist-header::after {
+      content: "✨❤️✨";
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      right: -15px;
+      bottom: -15px;
+      background-color: var(--yellow);
+      z-index: 0;
+      border-radius: 35px;
+      font-size: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.2;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .wishlist-header h2 {
+      font-size: 3rem;
+      color: white;
+      text-shadow: 4px 4px 0 #000;
+      margin-bottom: 10px;
+    }
+
+    .wishlist-header p {
+      font-size: 1.5rem;
+      color: white;
+      text-shadow: 2px 2px 0 #000;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--white);
+      padding: 15px 20px;
+      border-radius: var(--radius-medium);
+      border: var(--border-medium);
+      margin-bottom: 25px;
+      box-shadow: var(--shadow-small);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .user-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    #user-status {
+      background-color: var(--blue);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 25px;
+      border: var(--border-medium);
+      font-weight: bold;
+      min-width: 120px;
+      text-align: center;
+      box-shadow: var(--shadow-small);
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: var(--border-medium);
+      background-color: var(--lime);
+      color: var(--dark);
+      font-weight: bold;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-small);
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 6px 6px 0 #000;
+    }
+
+    .nav-btn.home {
+      background-color: var(--orange);
+    }
+
+    .nav-btn.cart {
+      background-color: var(--cyan);
+    }
+
+    .nav-btn.logout {
+      background-color: var(--red);
+      color: white;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background-color: var(--white);
+      padding: 20px;
+      border-radius: var(--radius-medium);
+      border: var(--border-medium);
+      box-shadow: var(--shadow-small);
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-card:nth-child(1) {
+      background-color: var(--pink);
+      color: white;
+    }
+
+    .stat-card:nth-child(2) {
+      background-color: var(--yellow);
+      color: var(--dark);
+    }
+
+    .stat-card:nth-child(3) {
+      background-color: var(--green);
+      color: white;
+    }
+
+    .stat-card:nth-child(4) {
+      background-color: var(--purple);
+      color: white;
+    }
+
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    /* Wishlist Items */
+    .wishlist-container {
+      background-color: var(--white);
+      border-radius: var(--radius-medium);
+      border: var(--border-medium);
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow-small);
+      min-height: 400px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--yellow);
+      border-top: 5px solid var(--pink);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading p {
+      font-size: 1.5rem;
+      color: var(--dark);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .empty-icon {
+      font-size: 5rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .empty-state h3 {
+      font-size: 2rem;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .empty-state p {
+      color: #666;
+      margin-bottom: 25px;
+      font-size: 1.2rem;
+    }
+
+    /* Wishlist Items Grid */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* Wishlist Item Card */
+    .item-card {
+      background-color: var(--white);
+      border-radius: var(--radius-medium);
+      border: var(--border-medium);
+      overflow: hidden;
+      box-shadow: var(--shadow-small);
+      transition: all 0.3s;
+    }
+
+    .item-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 0 #000;
+    }
+
+    .card-top {
+      background-color: var(--pink);
+      padding: 15px;
+      border-bottom: var(--border-medium);
+      position: relative;
+    }
+
+    .heart-icon {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.8rem;
+      animation: heartbeat 1.5s infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .item-name {
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+      text-shadow: 2px 2px 0 #000;
+    }
+
+    .item-category {
+      display: inline-block;
+      background-color: white;
+      color: var(--pink);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      border: 2px solid #000;
+    }
+
+    .card-body {
+      padding: 15px;
+    }
+
+    .item-description {
+      color: #555;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .item-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: var(--yellow);
+      border-radius: var(--radius-small);
+      border: 2px solid #000;
+    }
+
+    .item-price {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--dark);
+    }
+
+    .item-veg {
+      padding: 5px 15px;
+      border-radius: 15px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      border: 2px solid #000;
+    }
+
+    .veg {
+      background-color: var(--green);
+      color: white;
+    }
+
+    .non-veg {
+      background-color: var(--red);
+      color: white;
+    }
+
+    .item-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+    }
+
+    .added-date {
+      background-color: var(--cyan);
+      padding: 5px 12px;
+      border-radius: 15px;
+      color: var(--dark);
+      border: 2px solid #000;
+      font-weight: bold;
+    }
+
+    .availability {
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-weight: bold;
+      border: 2px solid #000;
+    }
+
+    .available {
+      background-color: var(--green);
+      color: white;
+    }
+
+    .unavailable {
+      background-color: #ccc;
+      color: #666;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: var(--radius-small);
+      border: var(--border-medium);
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      font-family: var(--font-cartoon);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 0 #000;
+    }
+
+    .add-to-cart-btn {
+      background-color: var(--blue);
+      color: white;
+    }
+
+    .remove-btn {
+      background-color: var(--red);
+      color: white;
+    }
+
+    .action-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* Login Required */
+    .login-required {
+      text-align: center;
+      padding: 60px 20px;
+      background-color: var(--orange);
+      border-radius: var(--radius-medium);
+      border: var(--border-medium);
+      margin-bottom: 25px;
+      box-shadow: var(--shadow-small);
+    }
+
+    .login-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .login-required h2 {
+      font-size: 2rem;
+      color: white;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 0 #000;
+    }
+
+    .login-required p {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      text-shadow: 1px 1px 0 #000;
+    }
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: var(--radius-medium);
+      border: var(--border-medium);
+      font-size: 1.2rem;
+      font-weight: bold;
+      z-index: 1000;
+      box-shadow: var(--shadow-big);
+      display: none;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .notification.success {
+      background-color: var(--green);
+      color: white;
+    }
+
+    .notification.error {
+      background-color: var(--red);
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-bar {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .user-section {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .nav-buttons {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .items-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .wishlist-header h2 {
+        font-size: 2.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .card-actions {
+        flex-direction: column;
+      }
+      
+      .item-meta {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="wishlist-header">
+    <div class="header-content">
+      <h2>❤️ My Wishlist</h2>
+      <p>All your favorite dishes in one place!</p>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="nav-bar">
+    <div class="user-section">
+      <div id="user-status">Guest</div>
+    </div>
+    <div class="nav-buttons">
+      <a href="/" class="nav-btn home">
+        <i class="fas fa-home"></i> Home
+      </a>
+      
+      <a href="/cart/" class="nav-btn cart">
+        <i class="fas fa-shopping-cart"></i> Cart
+      </a>
+      <button onclick="logout()" class="nav-btn logout">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+  </nav>
+
+  <!-- Login Required -->
+  <div id="login-required" class="login-required" style="display: none;">
+    <div class="login-icon">🔒</div>
+    <h2>Login Required!</h2>
+    <p>Please login to view your wishlist</p>
+    <a href="/login/" class="nav-btn" style="display: inline-flex; background-color: var(--pink);">
+      <i class="fas fa-sign-in-alt"></i> Login Now
+    </a>
+  </div>
+
+  <!-- Stats (Visible when logged in) -->
+  <div id="stats-container" class="stats-grid" style="display: none;">
+    <div class="stat-card">
+      <span class="stat-icon">❤️</span>
+      <div class="stat-number" id="total-items">0</div>
+      <div class="stat-label">Wishlist Items</div>
+    </div>
+    
+    <div class="stat-card">
+      <span class="stat-icon">💰</span>
+      <div class="stat-number">₹<span id="total-value">0</span></div>
+      <div class="stat-label">Total Value</div>
+    </div>
+    
+    <div class="stat-card">
+      <span class="stat-icon">🥬</span>
+      <div class="stat-number" id="veg-count">0</div>
+      <div class="stat-label">Veg Items</div>
+    </div>
+    
+    <div class="stat-card">
+      <span class="stat-icon">📅</span>
+      <div class="stat-number" id="days-old">0</div>
+      <div class="stat-label">Days Old</div>
+    </div>
+  </div>
+
+  <!-- Wishlist Container -->
+  <div class="wishlist-container">
+    <div id="wishlist-content">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading your wishlist...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div id="notification" class="notification"></div>
+
+  <script>
+    // API Configuration
+    const API_BASE =  'http://192.168.29.185:2222';
+    let currentUser = null;
+    let wishlistItems = [];
+
+    // DOM Elements
+    const userStatus = document.getElementById('user-status');
+    const loginRequired = document.getElementById('login-required');
+    const statsContainer = document.getElementById('stats-container');
+    const wishlistContent = document.getElementById('wishlist-content');
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', initializeWishlist);
+
+    async function initializeWishlist() {
+      await checkAuthStatus();
+      if (currentUser) {
+        await loadWishlistItems();
+      }
+    }
+
+    // API Fetch Helper
+    function apiFetch(url, options = {}) {
+      const token = localStorage.getItem("access");
+      const headers = options.headers || {};
+      
+      if (token) {
+        headers["Authorization"] = "Bearer " + token;
+      }
+      
+      // CSRF Token for Django
+      const csrfToken = getCookie('csrftoken');
+      if (csrfToken && (options.method === 'POST' || options.method === 'DELETE')) {
+        headers["X-CSRFToken"] = csrfToken;
+      }
+
+      return fetch(url, {
+        ...options,
+        headers,
+        credentials: 'include'
+      });
+    }
+
+    // Get Cookie
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    // Check Authentication
+    async function checkAuthStatus() {
+      try {
+        const response = await apiFetch(`${API_BASE}/api/auth/me/`);
+        
+        if (response.ok) {
+          currentUser = await response.json();
+          userStatus.textContent = currentUser.username || 'User';
+          userStatus.style.backgroundColor = '#4D96FF';
+          loginRequired.style.display = 'none';
+          statsContainer.style.display = 'grid';
+          return true;
+        } else {
+          throw new Error('Not authenticated');
+        }
+      } catch (error) {
+        currentUser = null;
+        userStatus.textContent = 'Guest';
+        userStatus.style.backgroundColor = '#FF9A3D';
+        loginRequired.style.display = 'block';
+        statsContainer.style.display = 'none';
+        return false;
+      }
+    }
+
+    // Load Wishlist Items
+    async function loadWishlistItems() {
+      wishlistContent.innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading your wishlist...</p>
+        </div>
+      `;
+
+      try {
+        // Get wishlist from API
+        const response = await apiFetch(`${API_BASE}/api/wishlist/`);
+
+        if (!response.ok) {
+          throw new Error('Failed to load wishlist');
+        }
+
+        const data = await response.json();
+        
+        // Check if we have data
+        if (!data.data || data.data.length === 0) {
+          showEmptyState();
+          updateStats([]);
+          return;
+        }
+
+        // Store items
+        wishlistItems = data.data;
+
+        // Display items
+        displayWishlistItems(wishlistItems);
+        
+        // Update stats
+        updateStats(wishlistItems);
+        
+      } catch (error) {
+        console.error('Error loading wishlist:', error);
+        showErrorState();
+      }
+    }
+
+    // Display Wishlist Items
+    function displayWishlistItems(items) {
+      if (items.length === 0) {
+        showEmptyState();
+        return;
+      }
+
+      let itemsHTML = '<div class="items-grid">';
+      
+      items.forEach(item => {
+        const product = item.product;
+        if (!product) return;
+
+        const isAvailable = true; // You can add availability logic
+        const addedDate = new Date(item.added_at);
+        const daysSinceAdded = Math.floor((new Date() - addedDate) / (1000 * 60 * 60 * 24));
+
+        itemsHTML += `
+          <div class="item-card" data-item-id="${item.id}">
+            <div class="card-top">
+              <div class="heart-icon">❤️</div>
+              <h3 class="item-name">${product.name || 'Product'}</h3>
+              <span class="item-category">${product.category || 'Category'}</span>
+            </div>
+            
+            <div class="card-body">
+              <p class="item-description">${product.description || 'Delicious dish!'}</p>
+              
+              <div class="item-details">
+                <div class="item-price">₹${product.price || '0'}</div>
+                <div class="item-veg ${product.is_veg ? 'veg' : 'non-veg'}">
+                  ${product.is_veg ? '🥬 Veg' : '🍗 Non-Veg'}
+                </div>
+              </div>
+              
+              <div class="item-meta">
+                <span class="added-date">Added ${daysSinceAdded} day${daysSinceAdded !== 1 ? 's' : ''} ago</span>
+                <span class="availability ${isAvailable ? 'available' : 'unavailable'}">
+                  ${isAvailable ? '✅ Available' : '❌ Unavailable'}
+                </span>
+              </div>
+              
+              <div class="card-actions">
+                <button class="action-btn add-to-cart-btn" onclick="addToCart(${product.id})">
+                  <i class="fas fa-cart-plus"></i> Add to Cart
+                </button>
+                <button class="action-btn remove-btn" onclick="removeFromWishlist(${item.id})">
+                  <i class="fas fa-trash"></i> Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      itemsHTML += '</div>';
+      wishlistContent.innerHTML = itemsHTML;
+    }
+
+    // Update Stats
+    function updateStats(items) {
+      if (items.length === 0) {
+        document.getElementById('total-items').textContent = '0';
+        document.getElementById('total-value').textContent = '0';
+        document.getElementById('veg-count').textContent = '0';
+        document.getElementById('days-old').textContent = '0';
+        return;
+      }
+
+      // Total items
+      document.getElementById('total-items').textContent = items.length;
+
+      // Total value
+      const totalValue = items.reduce((sum, item) => {
+        return sum + (parseFloat(item.product?.price) || 0);
+      }, 0);
+      document.getElementById('total-value').textContent = totalValue.toFixed(2);
+
+      // Veg count
+      const vegCount = items.filter(item => item.product?.is_veg).length;
+      document.getElementById('veg-count').textContent = vegCount;
+
+      // Oldest item
+      const oldestDate = new Date(Math.min(...items
+        .map(item => new Date(item.added_at))
+        .filter(date => !isNaN(date.getTime()))
+      ));
+      const daysOld = Math.floor((new Date() - oldestDate) / (1000 * 60 * 60 * 24));
+      document.getElementById('days-old').textContent = daysOld || '0';
+    }
+
+    // Show Empty State
+    function showEmptyState() {
+      wishlistContent.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">💔</div>
+          <h3>Your Wishlist is Empty!</h3>
+          <p>Start adding your favorite dishes to see them here</p>
+          <a href="/products/" class="nav-btn" style="display: inline-flex; margin-top: 20px;">
+            <i class="fas fa-utensils"></i> Browse Menu
+          </a>
+        </div>
+      `;
+    }
+
+    // Show Error State
+    function showErrorState() {
+      wishlistContent.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">⚠️</div>
+          <h3>Oops! Something went wrong</h3>
+          <p>Unable to load your wishlist. Please try again.</p>
+          <button onclick="loadWishlistItems()" class="nav-btn" style="display: inline-flex; margin-top: 20px; background-color: var(--blue);">
+            <i class="fas fa-redo"></i> Try Again
+          </button>
+        </div>
+      `;
+    }
+
+    // Add to Cart
+    async function addToCart(productId) {
+      if (!currentUser) {
+        showNotification('Please login to add items to cart', 'error');
+        return;
+      }
+
+      try {
+        const response = await apiFetch(`${API_BASE}/api/cart/cart/add_item/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            product: productId,
+            quantity: 1
+          })
+        });
+
+        if (response.ok) {
+          showNotification('Item added to cart successfully!', 'success');
+        } else {
+          throw new Error('Failed to add to cart');
+        }
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+        showNotification('Failed to add item to cart', 'error');
+      }
+    }
+
+    // Remove from Wishlist
+    async function removeFromWishlist(wishlistItemId) {
+      if (!confirm('Remove this item from wishlist?')) {
+        return;
+      }
+
+      try {
+        const response = await apiFetch(`${API_BASE}/api/wishlist/`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            product: getProductIdFromWishlistItem(wishlistItemId)
+          })
+        });
+
+        if (response.ok) {
+          // Remove from UI
+          const itemElement = document.querySelector(`[data-item-id="${wishlistItemId}"]`);
+          if (itemElement) {
+            itemElement.style.transform = 'scale(0.9)';
+            itemElement.style.opacity = '0.5';
+            setTimeout(() => {
+              loadWishlistItems();
+            }, 300);
+          } else {
+            loadWishlistItems();
+          }
+          showNotification('Item removed from wishlist', 'success');
+        } else {
+          throw new Error('Failed to remove from wishlist');
+        }
+      } catch (error) {
+        console.error('Error removing from wishlist:', error);
+        showNotification('Failed to remove item', 'error');
+      }
+    }
+
+    // Helper: Get product ID from wishlist item
+    function getProductIdFromWishlistItem(wishlistItemId) {
+      const item = wishlistItems.find(item => item.id === wishlistItemId);
+      return item ? item.product.id : null;
+    }
+
+    // Show Notification
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.style.display = 'block';
+      
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000);
+    }
+
+    // Logout
+    function logout() {
+      localStorage.removeItem('access');
+      localStorage.removeItem('refresh');
+      window.location.reload();
+    }
+
+  </script>
+</body>
+</html>

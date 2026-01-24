@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+
+  <!-- Stripe JS (ONLY HERE) -->
+  <script>
+    window.STRIPE_PUBLISHABLE_KEY = "{{ STRIPE_PUBLISHABLE_KEY }}";
+  </script>
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Cartoonish Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* === CARTOONISH THEME - ONLY STYLES ADDED === */
+    :root {
+      --rainbow-1: #FF6B8B;
+      --rainbow-2: #FF8E53;
+      --rainbow-3: #FFD166;
+      --rainbow-4: #06D6A0;
+      --rainbow-5: #118AB2;
+      --rainbow-6: #6A5AF9;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      --border-round: 16px;
+    }
+    
+    body {
+      font-family: 'Comic Neue', cursive;
+      background: linear-gradient(45deg, #FFE8E8, #E8F4FF, #F1FFE8);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    /* Cartoon bubbles */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      z-index: -1;
+    }
+    .bubble-1 { width: 100px; height: 100px; top: 10%; left: 5%; }
+    .bubble-2 { width: 150px; height: 150px; bottom: 15%; right: 8%; }
+    .bubble-3 { width: 80px; height: 80px; top: 40%; right: 15%; }
+    
+    /* Header styles */
+    h2 {
+      color: var(--rainbow-6);
+      font-size: 2.8em;
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 3px 3px 0 var(--rainbow-3);
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    h2:after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, 
+        var(--rainbow-1), 
+        var(--rainbow-2), 
+        var(--rainbow-3), 
+        var(--rainbow-4), 
+        var(--rainbow-5), 
+        var(--rainbow-6));
+      border-radius: 3px;
+    }
+    
+    /* Auth message */
+    #auth-error {
+      background: linear-gradient(135deg, #FFE8E8, #FFCCCC);
+      border: 3px dashed var(--rainbow-1);
+      border-radius: var(--border-round);
+      padding: 15px;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #D32F2F;
+      display: none;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    
+    /* Order Summary */
+    h3 {
+      color: var(--rainbow-5);
+      font-size: 1.8em;
+      margin: 25px 0 15px;
+      padding-left: 15px;
+      border-left: 6px solid var(--rainbow-4);
+      background: rgba(255, 255, 255, 0.6);
+      padding: 10px 20px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+    
+    /* Table styling */
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      background: white;
+      border-radius: var(--border-round);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 4px solid var(--rainbow-3);
+    }
+    
+    thead {
+      background: linear-gradient(90deg, var(--rainbow-4), var(--rainbow-5));
+    }
+    
+    th {
+      color: white;
+      padding: 18px 15px;
+      font-size: 1.2em;
+      text-align: left;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    
+    th:not(:last-child):after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 20%;
+      height: 60%;
+      width: 3px;
+      background: rgba(255,255,255,0.3);
+    }
+    
+    tbody tr {
+      transition: all 0.3s;
+    }
+    
+    tbody tr:nth-child(odd) {
+      background-color: #FFF9E6;
+    }
+    
+    tbody tr:nth-child(even) {
+      background-color: #E6F7FF;
+    }
+    
+    tbody tr:hover {
+      background: linear-gradient(90deg, #FFF0F5, #F0F8FF);
+      transform: translateX(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    td {
+      padding: 15px;
+      font-size: 1.1em;
+      border-bottom: 2px dashed #FFD166;
+    }
+    
+    /* Grand total */
+    #grand-total {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: var(--rainbow-1);
+      text-shadow: 2px 2px 0 var(--rainbow-3);
+      background: linear-gradient(45deg, #FFF9C4, #FFECB3);
+      padding: 5px 20px;
+      border-radius: 50px;
+      display: inline-block;
+      margin-left: 10px;
+      border: 3px solid var(--rainbow-2);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    hr {
+      border: none;
+      height: 4px;
+      background: linear-gradient(90deg, 
+        var(--rainbow-1), 
+        var(--rainbow-2), 
+        var(--rainbow-3), 
+        var(--rainbow-4), 
+        var(--rainbow-5), 
+        var(--rainbow-6));
+      border-radius: 2px;
+      margin: 30px 0;
+    }
+    
+    /* Payment method dropdown */
+    #payment-method {
+      font-family: 'Comic Neue', cursive;
+      font-size: 1.2em;
+      padding: 12px 20px;
+      border-radius: var(--border-round);
+      border: 3px solid var(--rainbow-4);
+      background: white;
+      color: var(--rainbow-6);
+      font-weight: bold;
+      width: 100%;
+      max-width: 400px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236A5AF9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 20px center;
+      background-size: 20px;
+      transition: all 0.3s;
+    }
+    
+    #payment-method:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    }
+    
+    #payment-method option {
+      font-weight: bold;
+      padding: 10px;
+    }
+    
+    /* Place order button */
+    #place-order-btn {
+      background: linear-gradient(45deg, var(--rainbow-1), var(--rainbow-6));
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      font-size: 1.4em;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(106, 90, 249, 0.4);
+      transition: all 0.3s;
+      display: block;
+      margin: 30px auto;
+      font-family: 'Comic Neue', cursive;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    #place-order-btn:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 15px 30px rgba(106, 90, 249, 0.6);
+    }
+    
+    #place-order-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    
+    #place-order-btn:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: 0.5s;
+    }
+    
+    #place-order-btn:hover:before {
+      left: 100%;
+    }
+    
+    /* Payment section */
+    #payment-section {
+      background: linear-gradient(135deg, #E6F7FF, #FFF0F5);
+      border-radius: var(--border-round);
+      padding: 25px;
+      margin-top: 20px;
+      border: 4px solid var(--rainbow-5);
+      box-shadow: var(--shadow);
+      display: none;
+    }
+    
+    #card-element {
+      padding: 20px;
+      border: 3px solid var(--rainbow-3);
+      border-radius: 12px;
+      background: white;
+      margin: 15px 0;
+      font-family: 'Comic Neue', cursive;
+      font-size: 1.1em;
+      transition: all 0.3s;
+    }
+    
+    #card-element:focus {
+      border-color: var(--rainbow-4);
+      box-shadow: 0 0 0 3px rgba(6, 214, 160, 0.3);
+    }
+    
+    #pay-btn {
+      background: linear-gradient(45deg, var(--rainbow-4), var(--rainbow-5));
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: 'Comic Neue', cursive;
+      font-weight: bold;
+      box-shadow: 0 6px 15px rgba(6, 214, 160, 0.4);
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+    
+    #pay-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(6, 214, 160, 0.6);
+    }
+    
+    #payment-status {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      
+      h2 {
+        font-size: 2.2em;
+      }
+      
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      
+      thead tr {
+        display: none;
+      }
+      
+      tr {
+        margin-bottom: 15px;
+        border-radius: var(--border-round);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      
+      td {
+        padding: 12px;
+        text-align: right;
+        position: relative;
+        border-bottom: 1px dashed #FFD166;
+      }
+      
+      td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 12px;
+        font-weight: bold;
+        color: var(--rainbow-5);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Cartoon bubbles -->
+  <div class="bubble bubble-1"></div>
+  <div class="bubble bubble-2"></div>
+  <div class="bubble bubble-3"></div>
+
+  <h2>🎉 Checkout Fun Zone! 🛒</h2>
+
+  <!-- AUTH MESSAGE (EXACTLY AS ORIGINAL) -->
+  <div id="auth-error" style="color:red;"></div>
+
+  <!-- ORDER SUMMARY (EXACTLY AS ORIGINAL) -->
+  <h3>Order Summary</h3>
+  <table border="1" width="100%">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody id="order-items"></tbody>
+  </table>
+
+  <p><strong>Grand Total:</strong> ₹<span id="grand-total">0</span></p>
+
+  <hr>
+
+  <!-- PAYMENT MODE (EXACTLY AS ORIGINAL) -->
+  <h3>Payment Method</h3>
+  <select id="payment-method">
+    <option value="card">Card (Stripe)</option>
+    <option value="upi">UPI (later)</option>
+    <option value="netbanking">Net Banking (later)</option>
+  </select>
+
+  <hr>
+
+  <button id="place-order-btn">🎯 Confirm & Pay 🚀</button>
+
+  <!-- STRIPE PAYMENT UI (EXACTLY AS ORIGINAL) -->
+  <div id="payment-section" style="display:none;">
+    <h3>Complete Payment</h3>
+    <div id="card-element"></div>
+    <button id="pay-btn">💳 Pay Now ⚡</button>
+    <p id="payment-status"></p>
+  </div>
+
+  <!-- ORIGINAL SCRIPTS (EXACTLY AS ORIGINAL) -->
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/checkout.js"></script>
+  
+  <!-- ADDED ONLY A SMALL SCRIPT FOR RESPONSIVE TABLE -->
+  <script>
+    // Only this small addition for mobile table - can be removed if not wanted
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.innerWidth <= 768) {
+        const tableHeaders = document.querySelectorAll('thead th');
+        const tableCells = document.querySelectorAll('tbody td');
+        
+        if (tableHeaders.length > 0 && tableCells.length > 0) {
+          tableHeaders.forEach((header, index) => {
+            const label = header.textContent;
+            tableCells.forEach((cell, cellIndex) => {
+              if (cellIndex % 4 === index) {
+                cell.setAttribute('data-label', label);
+              }
+            });
+          });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
