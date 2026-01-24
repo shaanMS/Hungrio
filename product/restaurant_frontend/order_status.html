@@ -2,116 +2,745 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Order Status</title>
+    <title>🎯 Order Status Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #6A5AF9;
+            --secondary: #FF6B8B;
+            --success: #00D4AA;
+            --warning: #FFAA2C;
+            --danger: #FF3860;
+            --light: #FFF9F2;
+            --dark: #3A2F4B;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.15);
+            --radius: 20px;
+            --radius-sm: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            padding: 40px;
-        }
-        .card {
-            background: #fff;
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
             padding: 20px;
-            max-width: 500px;
-            margin: auto;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
         }
-        .processing { color: orange; }
-        .success { color: green; }
-        .failed { color: red; }
-        button {
-            padding: 10px 16px;
+        
+        /* Animated Background Elements */
+        .cartoon-cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: -1;
+            opacity: 0.7;
+        }
+        
+        .cloud-1 {
+            width: 120px;
+            height: 60px;
+            top: 10%;
+            left: 5%;
+            animation: float 25s infinite linear;
+        }
+        
+        .cloud-2 {
+            width: 100px;
+            height: 50px;
+            bottom: 15%;
+            right: 8%;
+            animation: float 30s infinite linear reverse;
+        }
+        
+        @keyframes float {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(calc(100vw + 100px)); }
+        }
+        
+        /* Status Card */
+        .status-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: var(--shadow-lg);
+            border: 4px solid var(--dark);
+            position: relative;
+            overflow: hidden;
+            animation: cardAppear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .status-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--secondary), 
+                var(--success), 
+                var(--warning));
+        }
+        
+        /* Header */
+        .card-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .header-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: iconBounce 2s infinite;
+        }
+        
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .card-title {
+            font-family: 'Comic Neue', cursive;
+            font-size: 2.8em;
+            color: var(--dark);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0 var(--warning);
+        }
+        
+        .card-subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        /* Order ID Display */
+        .order-id-container {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin: 25px 0;
+            border: 3px dashed var(--primary);
+            text-align: center;
+            animation: borderGlow 2s infinite alternate;
+        }
+        
+        @keyframes borderGlow {
+            from { border-color: var(--primary); }
+            to { border-color: var(--secondary); }
+        }
+        
+        .order-id-label {
+            display: block;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .order-id-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4em;
+            font-weight: 800;
+            color: var(--dark);
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            border: 2px solid var(--primary);
+            letter-spacing: 1px;
+        }
+        
+        /* Status Container */
+        .status-container {
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .status-content {
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 25px;
+            border-radius: var(--radius-sm);
+            background: #f9f9ff;
+            border: 3px solid #eee;
+            transition: all 0.5s ease;
+        }
+        
+        /* Status States */
+        .status-processing .status-content {
+            background: linear-gradient(135deg, #FFF3CD 0%, #FFE8A0 100%);
+            border-color: var(--warning);
+            animation: processingPulse 2s infinite;
+        }
+        
+        @keyframes processingPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 170, 44, 0.2); }
+            50% { box-shadow: 0 0 0 15px rgba(255, 170, 44, 0); }
+        }
+        
+        .status-success .status-content {
+            background: linear-gradient(135deg, #D4FFEE 0%, #A8F7D8 100%);
+            border-color: var(--success);
+            animation: successGlow 3s infinite alternate;
+        }
+        
+        @keyframes successGlow {
+            from { box-shadow: 0 0 20px rgba(0, 212, 170, 0.3); }
+            to { box-shadow: 0 0 40px rgba(0, 212, 170, 0.6); }
+        }
+        
+        .status-failed .status-content {
+            background: linear-gradient(135deg, #FFE8EC 0%, #FFD1DA 100%);
+            border-color: var(--danger);
+        }
+        
+        /* Status Icons */
+        .status-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            animation: iconSpin 1s ease;
+        }
+        
+        @keyframes iconSpin {
+            from { transform: rotate(0deg) scale(0); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+        
+        .processing-icon { color: var(--warning); }
+        .success-icon { color: var(--success); }
+        .failed-icon { color: var(--danger); }
+        
+        .status-text {
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .status-subtext {
+            color: #666;
+            font-size: 1em;
+            max-width: 80%;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        /* Payment Details (Success State) */
+        .payment-details {
+            margin-top: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--success);
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .detail-value {
+            color: var(--dark);
+            font-weight: 700;
+        }
+        
+        .invoice-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            background: var(--success);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            animation: badgePulse 1.5s infinite;
+        }
+        
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Refresh Button */
+        .refresh-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border-radius: 50px;
             cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            font-family: 'Comic Neue', cursive;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(106, 90, 249, 0.4);
+        }
+        
+        .refresh-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+        
+        .refresh-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .refresh-btn:hover:before {
+            left: 100%;
+        }
+        
+        .refresh-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .refresh-icon {
+            animation: refreshSpin 1s infinite linear;
+        }
+        
+        @keyframes refreshSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Auto-refresh Indicator */
+        .auto-refresh-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .refresh-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--warning);
+            border-radius: 50%;
+            animation: dotPulse 1.5s infinite;
+        }
+        
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+        
+        /* Loading Animation */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .loading-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            animation: loadingBounce 0.6s infinite alternate;
+        }
+        
+        .loading-dot:nth-child(2) {
+            animation-delay: 0.2s;
+            background: linear-gradient(135deg, var(--secondary), var(--warning));
+        }
+        
+        .loading-dot:nth-child(3) {
+            animation-delay: 0.4s;
+            background: linear-gradient(135deg, var(--warning), var(--success));
+        }
+        
+        @keyframes loadingBounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+        
+        /* Error State */
+        .error-container {
+            text-align: center;
+        }
+        
+        .error-icon {
+            font-size: 60px;
+            color: var(--danger);
+            margin-bottom: 20px;
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .status-card {
+                padding: 25px;
+                margin: 15px;
+            }
+            
+            .card-title {
+                font-size: 2.2em;
+            }
+            
+            .header-icon {
+                font-size: 60px;
+            }
+            
+            .order-id-value {
+                font-size: 1.1em;
+                padding: 8px 15px;
+            }
+            
+            .refresh-btn {
+                padding: 15px 25px;
+                font-size: 1.1em;
+                width: 100%;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="cartoon-cloud cloud-1"></div>
+    <div class="cartoon-cloud cloud-2"></div>
+    
+    <!-- Status Card -->
+    <div class="status-card">
+        <!-- Header -->
+        <div class="card-header">
+            <div class="header-icon">📦</div>
+            <h1 class="card-title">Order Status Tracker</h1>
+            <p class="card-subtitle">Real-time updates on your order journey</p>
+        </div>
+        
+        <!-- Order ID -->
+        <div class="order-id-container">
+            <span class="order-id-label">Your Order ID</span>
+            <div class="order-id-value" id="orderIdText"></div>
+        </div>
+        
+        <!-- Status Content -->
+        <div class="status-container">
+            <div class="status-content" id="statusContent">
+                <!-- Initial loading state -->
+                <div class="loading-container" id="loadingState">
+                    <div class="loading-spinner">
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                    </div>
+                    <p class="status-text">Checking status...</p>
+                    <p class="status-subtext">Connecting to our secure servers</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Auto Refresh Indicator -->
+        <div class="auto-refresh-indicator" id="autoRefreshIndicator" style="display: none;">
+            <div class="refresh-dot"></div>
+            <span>Auto-refreshing every 5 seconds...</span>
+        </div>
+        
+        <!-- Refresh Button -->
+        <div class="refresh-container">
+            <button class="refresh-btn" onclick="checkStatus()" id="refreshBtn">
+                <i class="fas fa-sync-alt refresh-icon"></i>
+                Refresh Status
+            </button>
+        </div>
+    </div>
 
-<div class="card">
-    <h2>🧾 Order Status</h2>
-
-    <p><b>Order ID:</b> <span id="orderIdText"></span></p>
-    <p id="statusText">Checking status...</p>
-
-    <button onclick="checkStatus()">🔄 Refresh</button>
-</div>
-
-<script src="/static/js/api.js"></script>
-<script>
-    // ✅ URL se UUID uthao
-    // example: /orders/status.html?order_id=552d4e1e-...
-    const params = new URLSearchParams(window.location.search);
-    const orderId = params.get("order_id");
-
-    document.getElementById("orderIdText").innerText = orderId;
-
-    let pollingInterval = null;
-
-    async function checkStatus() {
-        const statusEl = document.getElementById("statusText");
-        statusEl.innerText = "Checking status...";
-
-        try {
-            const response = await apiFetch(
-                `/api/orders/status/${orderId}/`,
-                { method: "GET" }
-            );
-
-            const data = await response.json();
-            handleResponse(response.status, data);
-
-        } catch (err) {
-            statusEl.className = "failed";
-            statusEl.innerText = "❌ Network error. Try again.";
-        }
-    }
-
-    function handleResponse(statusCode, data) {
-        const statusEl = document.getElementById("statusText");
-
-        // ⏳ Stripe webhook delay case
-        if (statusCode === 202 && data.status === "processing") {
-            statusEl.className = "processing";
-            statusEl.innerText = "⏳ Payment is processing...";
-
-            if (!pollingInterval) {
-                pollingInterval = setInterval(checkStatus, 5000);
+    <script src="/static/js/api.js"></script>
+    <script>
+        // ✅ URL se UUID uthao
+        const pathParts = window.location.pathname.split("/").filter(Boolean);
+        const orderId = pathParts[pathParts.length - 1];
+        
+        // UI Elements
+        const orderIdText = document.getElementById("orderIdText");
+        const statusContent = document.getElementById("statusContent");
+        const refreshBtn = document.getElementById("refreshBtn");
+        const autoRefreshIndicator = document.getElementById("autoRefreshIndicator");
+        const loadingState = document.getElementById("loadingState");
+        
+        let pollingInterval = null;
+        let isProcessing = false;
+        
+        // Display Order ID
+        orderIdText.textContent = orderId || "Invalid Order ID";
+        
+        // Status Templates
+        const statusTemplates = {
+            loading: () => `
+                <div class="loading-container">
+                    <div class="loading-spinner">
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                    </div>
+                    <p class="status-text">Checking status...</p>
+                    <p class="status-subtext">Connecting to our secure servers</p>
+                </div>
+            `,
+            
+            processing: () => {
+                statusContent.parentElement.className = "status-container status-processing";
+                return `
+                    <i class="fas fa-spinner status-icon processing-icon"></i>
+                    <p class="status-text">⏳ Payment Processing</p>
+                    <p class="status-subtext">Your payment is being verified. This usually takes a few moments.</p>
+                    <p class="status-subtext">Please don't refresh or close this page.</p>
+                `;
+            },
+            
+            success: (data) => {
+                statusContent.parentElement.className = "status-container status-success";
+                return `
+                    <i class="fas fa-check-circle status-icon success-icon"></i>
+                    <p class="status-text">✅ Order Confirmed!</p>
+                    <p class="status-subtext">Your payment was successful and order is confirmed!</p>
+                    
+                    <div class="payment-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Payment ID:</span>
+                            <span class="detail-value">${data.payment_id || 'N/A'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Amount Paid:</span>
+                            <span class="detail-value">₹${data.amount || '0'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Invoice Status:</span>
+                            <span class="detail-value">
+                                ${data.invoice_available ? 
+                                    '<span class="invoice-badge">Available</span>' : 
+                                    'Generating...'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            failed: () => {
+                statusContent.parentElement.className = "status-container status-failed";
+                return `
+                    <i class="fas fa-times-circle status-icon failed-icon"></i>
+                    <p class="status-text">❌ Payment Failed</p>
+                    <p class="status-subtext">The payment could not be processed.</p>
+                    <p class="status-subtext" style="color: var(--danger); font-weight: 600;">
+                        If amount was deducted, it will be refunded within 5-7 business days.
+                    </p>
+                `;
+            },
+            
+            error: (message) => {
+                statusContent.parentElement.className = "status-container";
+                return `
+                    <div class="error-container">
+                        <i class="fas fa-exclamation-triangle error-icon"></i>
+                        <p class="status-text">⚠️ Network Error</p>
+                        <p class="status-subtext">${message || 'Unable to connect. Please try again.'}</p>
+                    </div>
+                `;
+            },
+            
+            invalid: () => {
+                statusContent.parentElement.className = "status-container";
+                return `
+                    <div class="error-container">
+                        <i class="fas fa-link-slash error-icon"></i>
+                        <p class="status-text">🔗 Invalid Order Link</p>
+                        <p class="status-subtext">The order ID in the URL appears to be invalid.</p>
+                        <p class="status-subtext">Please check the link and try again.</p>
+                    </div>
+                `;
             }
-            return;
+        };
+        
+        // Update UI with template
+        function updateStatusUI(templateName, data) {
+            statusContent.innerHTML = statusTemplates[templateName](data);
+        }
+        
+        async function checkStatus() {
+            if (isProcessing) return;
+            
+            isProcessing = true;
+            refreshBtn.disabled = true;
+            refreshBtn.innerHTML = '<i class="fas fa-spinner refresh-icon"></i> Checking...';
+            
+            // Show loading if not already showing
+            if (!pollingInterval) {
+                updateStatusUI('loading');
+            }
+            
+            try {
+                const response = await apiFetch(
+                    `/api/orders/status/${orderId}/`,
+                    { method: "GET" }
+                );
+
+                const data = await response.json();
+                handleResponse(response.status, data);
+
+            } catch (err) {
+                updateStatusUI('error', "Network error. Please check your connection.");
+                stopPolling();
+            } finally {
+                isProcessing = false;
+                refreshBtn.disabled = false;
+                refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Status';
+            }
         }
 
-        // 🛑 stop polling once final
-        if (pollingInterval) {
-            clearInterval(pollingInterval);
-            pollingInterval = null;
+        function handleResponse(statusCode, data) {
+            // ⏳ Stripe webhook delay case
+            if (statusCode === 202 && data.status === "processing") {
+                updateStatusUI('processing');
+                autoRefreshIndicator.style.display = "flex";
+                
+                if (!pollingInterval) {
+                    pollingInterval = setInterval(checkStatus, 5000);
+                    // Add visual feedback for auto-refresh
+                    autoRefreshIndicator.style.animation = "fadeIn 0.5s ease";
+                }
+                return;
+            }
+
+            // 🛑 stop polling once final
+            stopPolling();
+
+            if (data.status === "failed") {
+                updateStatusUI('failed');
+                return;
+            }
+
+            if (data.status === "success") {
+                updateStatusUI('success', data);
+                return;
+            }
+        }
+        
+        function stopPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+                autoRefreshIndicator.style.display = "none";
+            }
         }
 
-        if (data.status === "failed") {
-            statusEl.className = "failed";
-            statusEl.innerText = "❌ Payment Failed. Refund if deducted.";
-            return;
+        // 🚀 auto start
+        if (orderId && orderId.length > 10) {
+            checkStatus();
+        } else {
+            updateStatusUI('invalid');
+            refreshBtn.disabled = true;
+            refreshBtn.style.opacity = "0.6";
         }
-
-        if (data.status === "success") {
-            statusEl.className = "success";
-            statusEl.innerHTML = `
-                ✅ <b>Order Confirmed</b><br>
-                💳 Payment ID: ${data.payment_id}<br>
-                💰 Amount: ₹${data.amount}<br>
-                🧾 Invoice: ${data.invoice_available ? "Available" : "Generating..."}
-            `;
-        }
-    }
-
-    // 🚀 auto start
-    if (orderId) {
-        checkStatus();
-    } else {
-        document.getElementById("statusText").innerText =
-            "❌ Invalid order link";
-    }
-</script>
-
+        
+        // Add visual effects on button hover
+        refreshBtn.addEventListener('mouseenter', function() {
+            if (!this.disabled) {
+                this.style.transform = 'translateY(-5px) scale(1.05)';
+            }
+        });
+        
+        refreshBtn.addEventListener('mouseleave', function() {
+            if (!this.disabled) {
+                this.style.transform = 'translateY(0) scale(1)';
+            }
+        });
+    </script>
 </body>
 </html>
