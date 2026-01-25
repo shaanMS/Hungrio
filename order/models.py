@@ -17,7 +17,7 @@ class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    stripe_customer_id = models.CharField(max_length=255, blank=True, null=True)
     cart_snapshot = models.JSONField(default=dict)   # 🔥 IMPORTANT
 
     subtotal = models.DecimalField(max_digits=12, decimal_places=2)

@@ -62,9 +62,20 @@ class PlaceOrder(APIView):
         discount = Decimal("0.00")
         total = subtotal + tax - discount
 #  use below or any repitiive task in any other sevrice or chain in celery 
+        
+
+
+        customer = stripe.Customer.create(
+        email=request.user.email,
+        name=request.user.get_full_name()
+        )
+
+
+
         # 🧾 CREATE ORDER (SNAPSHOT BASED)
         order = Order.objects.create(
             user=request.user,
+            stripe_customer_id=customer.id,
             cart_snapshot={
                 "items": cart_items_snapshot,
                 "subtotal": str(subtotal),
@@ -95,7 +106,8 @@ class PlaceOrder(APIView):
             metadata={
                 "order_id": str(order.id),
                 "payment_id": str(payment.id)
-            }
+            },
+            customer=order.stripe_customer_id
         )
 
         # 🔄 CART LOCK
