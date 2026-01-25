@@ -20,7 +20,11 @@
             --radius-sm: 12px;
         }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
         body {
             font-family: 'Nunito', sans-serif;
@@ -34,6 +38,7 @@
             overflow-x: hidden;
         }
         
+        /* Animated Background Elements */
         .cartoon-cloud {
             position: absolute;
             background: white;
@@ -43,14 +48,28 @@
             opacity: 0.7;
         }
         
-        .cloud-1 { width: 120px; height: 60px; top: 10%; left: 5%; animation: float 25s infinite linear; }
-        .cloud-2 { width: 100px; height: 50px; bottom: 15%; right: 8%; animation: float 30s infinite linear reverse; }
+        .cloud-1 {
+            width: 120px;
+            height: 60px;
+            top: 10%;
+            left: 5%;
+            animation: float 25s infinite linear;
+        }
+        
+        .cloud-2 {
+            width: 100px;
+            height: 50px;
+            bottom: 15%;
+            right: 8%;
+            animation: float 30s infinite linear reverse;
+        }
         
         @keyframes float {
             0% { transform: translateX(-100px); }
             100% { transform: translateX(calc(100vw + 100px)); }
         }
         
+        /* Status Card */
         .status-card {
             background: white;
             border-radius: var(--radius);
@@ -65,8 +84,14 @@
         }
         
         @keyframes cardAppear {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
         
         .status-card::before {
@@ -76,11 +101,26 @@
             left: 0;
             width: 100%;
             height: 8px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--success), var(--warning));
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--secondary), 
+                var(--success), 
+                var(--warning));
         }
         
-        .card-header { text-align: center; margin-bottom: 40px; position: relative; }
-        .header-icon { font-size: 80px; margin-bottom: 20px; display: inline-block; animation: iconBounce 2s infinite; }
+        /* Header */
+        .card-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .header-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: iconBounce 2s infinite;
+        }
         
         @keyframes iconBounce {
             0%, 100% { transform: translateY(0); }
@@ -95,8 +135,12 @@
             text-shadow: 2px 2px 0 var(--warning);
         }
         
-        .card-subtitle { color: #666; font-size: 1.1em; }
+        .card-subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
         
+        /* Order ID Display */
         .order-id-container {
             background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
             border-radius: var(--radius-sm);
@@ -112,7 +156,14 @@
             to { border-color: var(--secondary); }
         }
         
-        .order-id-label { display: block; color: #666; font-size: 0.9em; margin-bottom: 8px; font-weight: 600; }
+        .order-id-label {
+            display: block;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
         .order-id-value {
             font-family: 'Courier New', monospace;
             font-size: 1.4em;
@@ -126,7 +177,12 @@
             letter-spacing: 1px;
         }
         
-        .status-container { margin: 40px 0; position: relative; }
+        /* Status Container */
+        .status-container {
+            margin: 40px 0;
+            position: relative;
+        }
+        
         .status-content {
             min-height: 120px;
             display: flex;
@@ -141,6 +197,7 @@
             transition: all 0.5s ease;
         }
         
+        /* Status States */
         .status-processing .status-content {
             background: linear-gradient(135deg, #FFF3CD 0%, #FFE8A0 100%);
             border-color: var(--warning);
@@ -168,7 +225,12 @@
             border-color: var(--danger);
         }
         
-        .status-icon { font-size: 50px; margin-bottom: 15px; animation: iconSpin 1s ease; }
+        /* Status Icons */
+        .status-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            animation: iconSpin 1s ease;
+        }
         
         @keyframes iconSpin {
             from { transform: rotate(0deg) scale(0); }
@@ -179,9 +241,22 @@
         .success-icon { color: var(--success); }
         .failed-icon { color: var(--danger); }
         
-        .status-text { font-size: 1.4em; font-weight: 700; margin-bottom: 10px; color: var(--dark); }
-        .status-subtext { color: #666; font-size: 1em; max-width: 80%; margin: 0 auto; line-height: 1.5; }
+        .status-text {
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
         
+        .status-subtext {
+            color: #666;
+            font-size: 1em;
+            max-width: 80%;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        /* Payment Details (Success State) */
         .payment-details {
             margin-top: 25px;
             padding: 20px;
@@ -192,8 +267,14 @@
         }
         
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .detail-row {
@@ -203,9 +284,19 @@
             border-bottom: 1px dashed #eee;
         }
         
-        .detail-row:last-child { border-bottom: none; }
-        .detail-label { color: #666; font-weight: 600; }
-        .detail-value { color: var(--dark); font-weight: 700; }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .detail-value {
+            color: var(--dark);
+            font-weight: 700;
+        }
         
         .invoice-badge {
             display: inline-block;
@@ -223,7 +314,11 @@
             50% { transform: scale(1.05); }
         }
         
-        .refresh-container { text-align: center; margin-top: 30px; }
+        /* Refresh Button */
+        .refresh-container {
+            text-align: center;
+            margin-top: 30px;
+        }
         
         .refresh-btn {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -249,7 +344,9 @@
             box-shadow: 0 15px 40px rgba(106, 90, 249, 0.4);
         }
         
-        .refresh-btn:active { transform: translateY(0) scale(0.98); }
+        .refresh-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
         
         .refresh-btn:before {
             content: '';
@@ -262,7 +359,9 @@
             transition: 0.5s;
         }
         
-        .refresh-btn:hover:before { left: 100%; }
+        .refresh-btn:hover:before {
+            left: 100%;
+        }
         
         .refresh-btn:disabled {
             opacity: 0.6;
@@ -270,13 +369,16 @@
             transform: none !important;
         }
         
-        .refresh-icon { animation: refreshSpin 1s infinite linear; }
+        .refresh-icon {
+            animation: refreshSpin 1s infinite linear;
+        }
         
         @keyframes refreshSpin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
         
+        /* Auto-refresh Indicator */
         .auto-refresh-indicator {
             display: flex;
             align-items: center;
@@ -301,8 +403,18 @@
             50% { transform: scale(1.5); opacity: 1; }
         }
         
-        .loading-container { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        .loading-spinner { display: flex; gap: 8px; }
+        /* Loading Animation */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            gap: 8px;
+        }
         
         .loading-dot {
             width: 20px;
@@ -327,8 +439,17 @@
             to { transform: translateY(-20px); }
         }
         
-        .error-container { text-align: center; }
-        .error-icon { font-size: 60px; color: var(--danger); margin-bottom: 20px; animation: shake 0.5s ease; }
+        /* Error State */
+        .error-container {
+            text-align: center;
+        }
+        
+        .error-icon {
+            font-size: 60px;
+            color: var(--danger);
+            margin-bottom: 20px;
+            animation: shake 0.5s ease;
+        }
         
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
@@ -336,12 +457,31 @@
             75% { transform: translateX(10px); }
         }
         
+        /* Responsive */
         @media (max-width: 768px) {
-            .status-card { padding: 25px; margin: 15px; }
-            .card-title { font-size: 2.2em; }
-            .header-icon { font-size: 60px; }
-            .order-id-value { font-size: 1.1em; padding: 8px 15px; }
-            .refresh-btn { padding: 15px 25px; font-size: 1.1em; width: 100%; }
+            .status-card {
+                padding: 25px;
+                margin: 15px;
+            }
+            
+            .card-title {
+                font-size: 2.2em;
+            }
+            
+            .header-icon {
+                font-size: 60px;
+            }
+            
+            .order-id-value {
+                font-size: 1.1em;
+                padding: 8px 15px;
+            }
+            
+            .refresh-btn {
+                padding: 15px 25px;
+                font-size: 1.1em;
+                width: 100%;
+            }
         }
         
         @keyframes fadeIn {
@@ -403,7 +543,7 @@
 
     <script src="/static/js/api.js"></script>
     <script>
-        // URL se order ID uthao
+        // ✅ URL se UUID uthao
         const pathParts = window.location.pathname.split("/").filter(Boolean);
         const orderId = pathParts[pathParts.length - 1];
         
@@ -412,11 +552,12 @@
         const statusContent = document.getElementById("statusContent");
         const refreshBtn = document.getElementById("refreshBtn");
         const autoRefreshIndicator = document.getElementById("autoRefreshIndicator");
+        const loadingState = document.getElementById("loadingState");
         
         let pollingInterval = null;
         let isProcessing = false;
         
-        // Order ID display
+        // Display Order ID
         orderIdText.textContent = orderId || "Invalid Order ID";
         
         // Status Templates
@@ -468,13 +609,6 @@
                             </span>
                         </div>
                     </div>
-
-                    <!-- Invoice Download Button -->
-                    <div style="margin-top: 30px; text-align: center;">
-                        <button id="downloadInvoiceBtn" class="refresh-btn" style="background: linear-gradient(135deg, #635bff, #8a7cff); padding: 16px 40px; font-size: 1.1em;">
-                            <i class="fas fa-file-invoice-dollar"></i> Download Invoice
-                        </button>
-                    </div>
                 `;
             },
             
@@ -514,50 +648,9 @@
             }
         };
         
-        function updateStatusUI(templateName, data = {}) {
+        // Update UI with template
+        function updateStatusUI(templateName, data) {
             statusContent.innerHTML = statusTemplates[templateName](data);
-            
-            // Success hone par download button ka listener laga do
-            if (templateName === 'success') {
-                setTimeout(attachDownloadListener, 300); // DOM update hone ke baad
-            }
-        }
-        
-        function attachDownloadListener() {
-            const downloadBtn = document.getElementById("downloadInvoiceBtn");
-            if (!downloadBtn) return;
-
-            downloadBtn.addEventListener('click', async function() {
-                downloadBtn.disabled = true;
-                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Opening...';
-
-                try {
-                    const response = await apiFetch(`/api/invoices/${orderId}/download/`, {
-                        method: "GET"
-                    });
-
-                    if (!response.ok) {
-                        let errorMsg = "Failed to download invoice";
-                        try {
-                            const errorData = await response.json();
-                            errorMsg = errorData.detail || errorMsg;
-                        } catch {}
-                        alert(errorMsg);
-                        return;
-                    }
-
-                    // Agar backend redirect bhej raha hai (302), browser khud handle karega
-                    // PDF Stripe se direct khulega/download hoga
-                    alert("Invoice khul raha hai...");
-
-                } catch (err) {
-                    console.error("Invoice download error:", err);
-                    alert("Kuch gadbad ho gayi. Please try again.");
-                } finally {
-                    downloadBtn.disabled = false;
-                    downloadBtn.innerHTML = '<i class="fas fa-file-invoice-dollar"></i> Download Invoice';
-                }
-            });
         }
         
         async function checkStatus() {
@@ -567,6 +660,7 @@
             refreshBtn.disabled = true;
             refreshBtn.innerHTML = '<i class="fas fa-spinner refresh-icon"></i> Checking...';
             
+            // Show loading if not already showing
             if (!pollingInterval) {
                 updateStatusUI('loading');
             }
@@ -591,17 +685,20 @@
         }
 
         function handleResponse(statusCode, data) {
+            // ⏳ Stripe webhook delay case
             if (statusCode === 202 && data.status === "processing") {
                 updateStatusUI('processing');
                 autoRefreshIndicator.style.display = "flex";
                 
                 if (!pollingInterval) {
                     pollingInterval = setInterval(checkStatus, 5000);
+                    // Add visual feedback for auto-refresh
                     autoRefreshIndicator.style.animation = "fadeIn 0.5s ease";
                 }
                 return;
             }
 
+            // 🛑 stop polling once final
             stopPolling();
 
             if (data.status === "failed") {
@@ -623,7 +720,7 @@
             }
         }
 
-        // Auto start
+        // 🚀 auto start
         if (orderId && orderId.length > 10) {
             checkStatus();
         } else {
@@ -632,7 +729,7 @@
             refreshBtn.style.opacity = "0.6";
         }
         
-        // Refresh button hover effects
+        // Add visual effects on button hover
         refreshBtn.addEventListener('mouseenter', function() {
             if (!this.disabled) {
                 this.style.transform = 'translateY(-5px) scale(1.05)';

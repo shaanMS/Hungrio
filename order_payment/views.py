@@ -13,6 +13,7 @@ import stripe
 from django.conf import settings
 import json
 from order.tasks import send_order_confirmation_email
+from invoice.tasks import generate_invoice
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
@@ -241,6 +242,9 @@ def stripe_webhook(request):
 
         print("✅ Order & Payment updated in DB")
         send_order_confirmation_email.delay(order_id,payment_id)
+
+       #generating invoice
+        generate_invoice.delay(order_id)
     # -------------------------
     # PAYMENT FAILED
     # -------------------------
@@ -298,6 +302,5 @@ def payment_webhook(request):
     return HttpResponse(status=200)
 
 '''
-
-
+  
 
