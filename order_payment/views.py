@@ -61,16 +61,21 @@ class PlaceOrder(APIView):
         tax = subtotal * Decimal("0.05")
         discount = Decimal("0.00")
         total = subtotal + tax - discount
+
+
 #  use below or any repitiive task in any other sevrice or chain in celery 
         
 
 
         customer = stripe.Customer.create(
         email=request.user.email,
-        name=request.user.get_full_name()
+        name='not given' #request.user.get_full_name()
         )
-
-
+        print('---88888888888888888--*************')
+        print('\n\n\n\n')
+        print('------   ',customer.id)
+        print('\n\n\n\n')
+        print('---88888888888888888--*************')
 
         # 🧾 CREATE ORDER (SNAPSHOT BASED)
         order = Order.objects.create(
@@ -89,7 +94,8 @@ class PlaceOrder(APIView):
             total_amount=total,
             status="PAYMENT_PENDING"
         )
-
+        
+        print("✅\n\n\n ORDER CREATED, ID =", order.id,'\n\n\n\n\n')
         # 💳 PAYMENT TRANSACTION (ORDER LINKED)
         payment = PaymentTransaction.objects.create(
             user=request.user,
