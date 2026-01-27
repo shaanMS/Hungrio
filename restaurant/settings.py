@@ -7,6 +7,8 @@ from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print('\n\n\n\n\n\n')
+print(BASE_DIR,'\n\n\n\n\n\n\n----')
 load_dotenv(BASE_DIR / ".env") # iske bagair django nhi load nhi karega ok!
 print('-------------------  ',BASE_DIR)
 
@@ -18,7 +20,7 @@ SMTP_HOST_KEY_BREVO = os.getenv("SMTP_HOST_KEY_BREVO")
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 
-print("Stripe Secret:", STRIPE_SECRET_KEY,'\n',STRIPE_PUBLISHABLE_KEY) 
+#print("Stripe Secret:", STRIPE_SECRET_KEY,'\n',STRIPE_PUBLISHABLE_KEY) 
 
 
 if not STRIPE_SECRET_KEY:
@@ -34,7 +36,7 @@ if not STRIPE_SECRET_KEY:
 
 
 
-FRONTEND_URL = "http://localhost:2222"
+FRONTEND_URL = "http://localhost:9998"
 '''
 preffered way may be
 
@@ -42,6 +44,9 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:2222")
 
 
 '''
+
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -64,7 +69,7 @@ INSTALLED_APPS = [
     'csp' ,# django csp , content security policy 
     'corsheaders',
     'rest_framework',      
-    'debug_toolbar',
+   
     # -------------------------------
     # Your custom apps (in logical order)
     # -------------------------------
@@ -110,7 +115,7 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+   # "debug_toolbar.middleware.DebugToolbarMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -122,62 +127,133 @@ MIDDLEWARE = [
     "csp.middleware.CSPMiddleware",
 ]
 
+# CONTENT_SECURITY_POLICY = {
+#     "DIRECTIVES": {
+#         "default-src": ["'self'" , ],
+
+#         "script-src": [
+#             "'self'",
+#            # "'unsafe-inline'",   # ❗ dev only
+#              NONCE,
+#           # "'unsafe-eval'",  
+#           # "'http://192.168.29.185:2222/static/'",
+#             "https://js.stripe.com",
+           
+
+#         ],
+
+#         "style-src": [
+#             "'self'",
+#            # "'unsafe-inline'",   # ❗ dev only
+#              NONCE,
+#           #  "http://192.168.29.185:2222/static/",
+#           #  '',
+#              "https://js.stripe.com",
+#         ],
+
+#         "img-src": [
+#             "'self'",
+#             "data:",
+#             "blob:",
+#             "https://js.stripe.com",
+#         ],
+
+#         "font-src": [
+#             "'self'",
+#             "data:",
+#             "https://js.stripe.com",
+#         ],
+#         "frame-src": [
+#     "https://js.stripe.com",
+#         ],
+
+#         "connect-src": [
+#             "'self'",
+#             "http://127.0.0.1:2222",
+#             "http://localhost:2222",
+#           #  "http://192.168.29.185:2222",
+#           #  "http://192.168.29.185:*",
+#           #  "http://192.168.29.185:2222/static/",
+#              "https://js.stripe.com",
+#             '',
+#         ],
+
+#         "frame-ancestors": ["'none'"],
+#         "base-uri": ["'self'"],
+#         "object-src": ["'none'"],
+#     }
+# }
+
+
+
+
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
-        "default-src": ["'self'" , ],
+        "default-src": ["'self'"],
 
-        "script-src": [
+        "script-src":[
             "'self'",
-            "'unsafe-inline'",   # ❗ dev only
-             NONCE,
-           "'unsafe-eval'",  
-           "'http://192.168.29.185:2222/static/'",
-            "https://js.stripe.com",
-           '', 
-
+             "'unsafe-inline'",
+             #  "http://localhost:9998",
+            #   "http://127.0.0.1:9998",
+            #   "http://127.0.0.1:2222/",
+          #  NONCE,
+             "https://js.stripe.com",
+            "'unsafe-eval'",
         ],
 
-        "style-src": [
+        # "style-src": [
+        #     "'self'",
+        #   #  NONCE,
+        #      "http://localhost:9998",
+        #      "http://127.0.0.1:9998",
+        #       "https://js.stripe.com",
+        #      "https://fonts.googleapis.com",
+        #     "https://cdnjs.cloudflare.com",
+        # ],
+"style-src": ["'self'", "'unsafe-inline'", "http://localhost:9998", "http://127.0.0.1:9998", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
+
+        "font-src": [
             "'self'",
-            "'unsafe-inline'",   # ❗ dev only
-            NONCE,
-            "http://192.168.29.185:2222/static/",
-            '',
-             "https://js.stripe.com",
+            "'unsafe-inline'"
+            "http://localhost:9998",
+             "http://127.0.0.1:9998",
+            "https://fonts.gstatic.com",
+            "https://cdnjs.cloudflare.com",
+            "data:",
         ],
 
         "img-src": [
             "'self'",
             "data:",
             "blob:",
-            "https://js.stripe.com",
         ],
 
-        "font-src": [
-            "'self'",
-            "data:",
-            "https://js.stripe.com",
-        ],
         "frame-src": [
-    "https://js.stripe.com",
+            "https://js.stripe.com",
         ],
 
         "connect-src": [
             "'self'",
+            "'unsafe-inline'"
+            "http://localhost:9998",
+            "http://127.0.0.1:9998",
+            "http://localhost", 
             "http://127.0.0.1:2222",
-            "http://localhost:2222",
-            "http://192.168.29.185:2222",
-            "http://192.168.29.185:*",
-            "http://192.168.29.185:2222/static/",
-             "https://js.stripe.com",
-            '',
+            "https://js.stripe.com",
         ],
 
-        "frame-ancestors": ["'none'"],
-        "base-uri": ["'self'"],
         "object-src": ["'none'"],
+        "base-uri": ["'self'"],
+        "frame-ancestors": ["'none'"],
     }
 }
+
+
+
+
+
+
 
 
 ROOT_URLCONF = "restaurant.urls"
@@ -200,7 +276,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "restaurant.wsgi.application"
+#WSGI_APPLICATION = "restaurant.wsgi.application"
 
 
 # Database
@@ -254,7 +330,7 @@ USE_TZ = True
 
 
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/" # leading slash for nginx
 
 STATICFILES_DIRS = [
     BASE_DIR / "product" / "restaurant_frontend",  # Agar static files serve karni hain
@@ -301,14 +377,14 @@ INSTALLED_APPS += [
 ]
 
 # 2. CORS Settings (frontend ke liye must)
-CORS_ALLOW_ALL_ORIGINS = True  # Production mein False rakho
+CORS_ALLOW_ALL_ORIGINS = False  # Production mein False rakho
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:2222",
-    "http://127.0.0.1:2222",
-     "http://192.168.29.185:2222",
-    #'*',
+     "http://127.0.0.1:2222",
+    "http://localhost:9998",
+    "http://127.0.0.1:9998",
 ]
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = False
 
 # 3. Channels (WebSockets)
 ASGI_APPLICATION = 'restaurant.asgi.application'  # project ke asgi.py file ka path
@@ -398,6 +474,9 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+# if DEBUG:
+#     INSTALLED_APPS += ["debug_toolbar"]
+#     MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
 
 

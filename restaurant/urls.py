@@ -8,6 +8,8 @@ from rest_framework_simplejwt.views import (
 from django.conf import settings
 from django.views.generic import TemplateView
 from checkout_and_billing.views import checkout_view
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -40,12 +42,13 @@ urlpatterns = [
 ]
 
 
-
-
-
-
 if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+
+# if settings.DEBUG:
+#     import debug_toolbar
+#     urlpatterns = [
+#         path('__debug__/', include(debug_toolbar.urls)),
+#     ] + urlpatterns
