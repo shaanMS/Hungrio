@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Status</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 40px;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            max-width: 520px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .processing { color: orange; }
+        .success { color: green; }
+        .failed { color: red; }
+
+        button {
+            padding: 10px 16px;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        #invoiceBtn {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>🧾 Order Status</h2>
+
+    <p><b>Order ID:</b> <span id="orderIdText"></span></p>
+    <p id="statusText">Checking status...</p>
+
+    <button onclick="checkStatus()">🔄 Refresh</button>
+    <button id="invoiceBtn">🧾 Download Invoice</button>
+</div>
+
+<!-- 🔐 Common authenticated fetch -->
+<script src="/static/js/api.js"></script>
+
+<script>
+/* ===============================
+   ORDER STATUS + INVOICE LOGIC
+   =============================== */
+
+    // ✅ orderId URL se uthao
+    // example: /orders/status/552d4e1e-xxxx/
+    const pathParts = window.location.pathname.split("/").filter(Boolean);
+    const orderId = pathParts[pathParts.length - 1];
+    window.orderId = orderId; // 👈 invoice ke liye global
+
+    document.getElementById("orderIdText").innerText = orderId;
+
+    let pollingInterval = null;
+    const statusEl = document.getElementById("statusText");
+    const invoiceBtn = document.getElementById("invoiceBtn");
+
+    /* ===============================
+       ORDER STATUS API
+       =============================== */
+    async function checkStatus() {
+        statusEl.innerText = "Checking status...";
+        statusEl.className = "";
+
+        try {
+            const response = await apiFetch(
+                `/api/orders/status/${orderId}/`,
+                { method: "GET" }
+            );
+
+            const data = await response.json();
+            handleStatus(response.status, data);
+
+        } catch (err) {
+            statusEl.className = "failed";
+            statusEl.innerText = "❌ Network error";
+        }
+    }
+
+    function handleStatus(statusCode, data) {
+
+        // ⏳ Stripe webhook delay
+        if (statusCode === 202 && data.status === "processing") {
+            statusEl.className = "processing";
+            statusEl.innerText = "⏳ Payment processing...";
+
+            if (!pollingInterval) {
+                pollingInterval = setInterval(checkStatus, 5000);
+            }
+            return;
+        }
+
+        // 🛑 stop polling
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+        }
+
+        if (data.status === "failed") {
+            statusEl.className = "failed";
+            statusEl.innerText = "❌ Payment failed";
+            return;
+        }
+
+        if (data.status === "success") {
+            statusEl.className = "success";
+            statusEl.innerHTML = `
+                ✅ <b>Order Confirmed</b><br>
+                💳 Payment ID: ${data.payment_id}<br>
+                💰 Amount: ₹${data.amount}<br>
+                🧾 Invoice: ${data.invoice_available ? "Ready" : "Generating..."}
+            `;
+
+            // 👇 Invoice button sirf success pe
+            invoiceBtn.style.display = "inline-block";
+        }
+    }
+
+    /* ===============================
+       INVOICE API (Stripe / Self PDF)
+       =============================== */
+    invoiceBtn.addEventListener("click", async () => {
+        invoiceBtn.innerText = "⏳ Fetching invoice...";
+
+        try {
+            const response = await apiFetch(
+                `/api/invoices/${orderId}/stripe/download/`,
+                { method: "GET" }
+            );
+
+            const data = await response.json();
+
+            /**
+             Expected backend response:
+             {
+               stripe_invoice_url: "https://invoice.stripe.com/..."
+             }
+             OR
+             {
+               pdf_url: "/media/invoices/INV-001.pdf"
+             }
+             */
+
+            if (data.stripe_invoice_url) {
+                window.open(data.stripe_invoice_url, "_blank");
+            } 
+            else if (data.pdf_url) {
+                window.open(data.pdf_url, "_blank");
+            } 
+            else {
+                alert("Invoice not ready yet");
+            }
+
+        } catch (err) {
+            alert("Invoice fetch failed");
+            console.error(err);
+        } finally {
+            invoiceBtn.innerText = "🧾 Download Invoice";
+        }
+    });
+
+    // 🚀 Auto start
+    if (orderId) {
+        checkStatus();
+    } else {
+        statusEl.innerText = "❌ Invalid order link";
+    }
+
+</script>
+
+</body>
+</html>

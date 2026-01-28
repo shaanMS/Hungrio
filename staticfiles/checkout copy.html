@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+
+  <!-- Stripe JS (ONLY HERE) -->
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<h2>Checkout</h2>
+
+<!-- AUTH MESSAGE -->
+<div id="auth-error" style="color:red;"></div>
+
+<!-- ORDER SUMMARY -->
+<h3>Order Summary</h3>
+<table border="1" width="100%">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Qty</th>
+      <th>Price</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody id="order-items"></tbody>
+</table>
+
+<p><strong>Grand Total:</strong> ₹<span id="grand-total">0</span></p>
+
+<hr>
+
+<!-- PAYMENT MODE -->
+<h3>Payment Method</h3>
+<select id="payment-method">
+  <option value="card">Card (Stripe)</option>
+  <option value="upi">UPI (later)</option>
+  <option value="netbanking">Net Banking (later)</option>
+</select>
+
+<hr>
+
+<button id="place-order-btn">Confirm & Pay</button>
+
+<!-- STRIPE PAYMENT UI -->
+<div id="payment-section" style="display:none;">
+  <h3>Complete Payment</h3>
+  <div id="card-element"></div>
+  <button id="pay-btn">Pay Now</button>
+  <p id="payment-status"></p>
+</div>
+
+<script src="/static/js/api.js"></script>
+<script src="/static/js/checkout.js"></script>
+
+</body>
+</html>

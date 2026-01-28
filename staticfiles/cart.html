@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Cart - Food Ordering</title>
+  <style>
+    :root {
+      --primary-yellow: #FFD166;
+      --primary-red: #EF476F;
+      --primary-green: #06D6A0;
+      --primary-blue: #118AB2;
+      --primary-purple: #8338EC;
+      --primary-pink: #FF5D8F;
+      --primary-orange: #FF9E00;
+      --background: linear-gradient(135deg, #FFFCF9 0%, #FFE8E8 100%);
+      --card-bg: #FFFFFF;
+      --text-dark: #073B4C;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      --shadow-lg: 0 15px 30px rgba(0, 0, 0, 0.18);
+      --cartoon-border: 4px solid var(--text-dark);
+      --border-radius: 20px;
+      --font-cartoon: 'Comic Neue', cursive, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-cartoon);
+      background: var(--background);
+      color: var(--text-dark);
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .cart-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Cart Header */
+    .cart-header {
+      background: linear-gradient(135deg, var(--primary-yellow), var(--primary-orange));
+      padding: 25px 30px;
+      border-radius: var(--border-radius);
+      border: var(--cartoon-border);
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .cart-icon {
+      font-size: 4rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .cart-header h2 {
+      font-size: 2.8rem;
+      color: white;
+      text-shadow: 4px 4px 0 var(--text-dark);
+    }
+
+    /* Cart Items */
+    .cart-items-container {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: var(--border-radius);
+      border: var(--cartoon-border);
+      margin-bottom: 25px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 60px;
+      height: 60px;
+      border: 6px solid var(--primary-yellow);
+      border-top: 6px solid var(--primary-red);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    .loading p {
+      font-size: 1.5rem;
+      color: var(--text-dark);
+      font-weight: bold;
+    }
+
+    /* Empty Cart */
+    .empty-cart {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .empty-cart-icon {
+      font-size: 8rem;
+      margin-bottom: 20px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .empty-cart p:first-of-type {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: var(--primary-red);
+      margin-bottom: 10px;
+    }
+
+    /* Cart Item */
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 3px dashed var(--primary-yellow);
+      transition: all 0.3s;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-name {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .item-price {
+      font-size: 1.4rem;
+      color: var(--primary-red);
+      font-weight: bold;
+    }
+
+    .item-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary-blue);
+      padding: 8px 12px;
+      border-radius: 25px;
+      border: 3px solid var(--text-dark);
+    }
+
+    .qty-btn {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      border: 2px solid var(--text-dark);
+      background: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quantity {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .item-total {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary-purple);
+      min-width: 100px;
+      text-align: right;
+    }
+
+    .remove-btn {
+      background: var(--primary-red);
+      color: white;
+      border: 3px solid var(--text-dark);
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Cart Summary */
+    .cart-summary {
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+      padding: 25px;
+      border-radius: var(--border-radius);
+      border: var(--cartoon-border);
+      margin-bottom: 25px;
+      box-shadow: var(--shadow);
+    }
+
+    .cart-summary h3 {
+      font-size: 1.8rem;
+      color: white;
+      margin-bottom: 15px;
+    }
+
+    .total-amount {
+      font-size: 3rem;
+      font-weight: bold;
+      color: white;
+      text-shadow: 3px 3px 0 var(--text-dark);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .checkout-btn, .back-btn {
+      flex: 1;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      border: var(--cartoon-border);
+      font-family: var(--font-cartoon);
+      font-weight: bold;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .checkout-btn {
+      background: linear-gradient(135deg, var(--primary-purple), var(--primary-pink));
+      color: white;
+    }
+
+    .back-btn {
+      background: linear-gradient(135deg, var(--primary-yellow), var(--primary-orange));
+      color: var(--text-dark);
+    }
+
+    /* Notifications */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 15px;
+      color: white;
+      font-weight: bold;
+      z-index: 1000;
+      box-shadow: var(--shadow-lg);
+      border: var(--cartoon-border);
+      display: none;
+    }
+
+    .notification.success {
+      background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+    }
+
+    .notification.error {
+      background: linear-gradient(135deg, var(--primary-red), var(--primary-pink));
+    }
+
+    /* Animations */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    @media (max-width: 768px) {
+      .cart-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+      
+      .item-actions {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="cart-container">
+    <div class="cart-header">
+      <div class="cart-icon">🛒</div>
+      <h2>My Shopping Cart</h2>
+    </div>
+
+    <div id="cart-items" class="cart-items-container">
+      <!-- Cart items will be loaded here -->
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading your cart...</p>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <h3>Total Amount</h3>
+      <div class="total-amount">₹<span id="cart-total">0.00</span></div>
+      <p style="color: white; opacity: 0.9; margin-top: 10px;">Inclusive of all taxes</p>
+    </div>
+
+    <div class="action-buttons">
+      <button onclick="checkout()" class="checkout-btn">
+        <i class="fas fa-lock"></i> Proceed to Checkout
+      </button>
+      <a href="/" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Continue Shopping
+      </a>
+    </div>
+  </div>
+
+  <div id="notification" class="notification"></div>
+
+  <script>
+    // Your existing apiFetch function
+    function apiFetch(url, options = {}) {
+      const token = localStorage.getItem("access");
+      const headers = options.headers || {};
+      
+      if (token) {
+        headers["Authorization"] = "Bearer " + token;
+      }
+      
+      // For Django CSRF protection if needed
+      const csrfToken = getCookie('csrftoken');
+      if (csrfToken && (options.method === 'POST' || options.method === 'PUT' || options.method === 'DELETE')) {
+        headers["X-CSRFToken"] = csrfToken;
+      }
+
+      return fetch(url, {
+        ...options,
+        headers,
+        credentials: 'include' // Important for session cookies
+      });
+    }
+
+    // Helper function to get cookie
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    // Global variable to store product prices
+    let productPrices = {};
+
+    // Load cart with proper API handling
+    async function loadCart() {
+      const box = document.getElementById("cart-items");
+      
+      try {
+        // First, load all products to get prices
+        const productsRes = await fetch("/api/products/");
+        if (productsRes.ok) {
+          const productsData = await productsRes.json();
+          // Store all product prices
+          productsData.results.forEach(product => {
+            productPrices[product.id] = parseFloat(product.final_price);
+          });
+        }
+
+        // Now load cart items
+        const cartRes = await apiFetch("/api/cart/cart/list_items/");
+        
+        if (!cartRes.ok) {
+          if (cartRes.status === 401) {
+            showNotification("Please login to view your cart", "error");
+            box.innerHTML = `
+              <div class="empty-cart">
+                <div class="empty-cart-icon">🔒</div>
+                <p>Login Required</p>
+                <p>Please login to view your cart</p>
+                <a href="/login" class="back-btn" style="display: inline-block; margin-top: 20px;">Login Now</a>
+              </div>
+            `;
+          } else {
+            throw new Error("Failed to load cart");
+          }
+          return;
+        }
+
+        const cartData = await cartRes.json();
+        console.log("Cart Data:", cartData);
+
+        let total = 0;
+        
+        if (!cartData.items || cartData.items.length === 0) {
+          box.innerHTML = `
+            <div class="empty-cart">
+              <div class="empty-cart-icon">🛒</div>
+              <p>Your cart is empty</p>
+              <p>Add some delicious items from our menu!</p>
+            </div>
+          `;
+        } else {
+          let cartHTML = '';
+          
+          cartData.items.forEach(item => {
+            const price = productPrices[item.product] || 0;
+            const itemTotal = item.quantity * price;
+            total += itemTotal;
+
+            cartHTML += `
+              <div class="cart-item" data-item-id="${item.product}">
+                <div class="item-info">
+                  <div class="item-name">${item.product_name}</div>
+                  <div class="item-price">₹${price.toFixed(2)} per item</div>
+                </div>
+                <div class="item-actions">
+                  <div class="quantity-controls">
+                    <button class="qty-btn decrease" onclick="updateCartQuantity(${item.product}, ${item.quantity - 1})">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="quantity">${item.quantity}</span>
+                    <button class="qty-btn" onclick="updateCartQuantity(${item.product}, ${item.quantity + 1})">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                  <div class="item-total">₹${itemTotal.toFixed(2)}</div>
+                  <button class="remove-btn" onclick="removeFromCart(${item.product})">
+                    <i class="fas fa-trash"></i> Remove
+                  </button>
+                </div>
+              </div>
+            `;
+          });
+          
+          box.innerHTML = cartHTML;
+        }
+
+        // Update total display
+        document.getElementById("cart-total").textContent = total.toFixed(2);
+
+      } catch (error) {
+        console.error("Error loading cart:", error);
+        box.innerHTML = `
+          <div class="empty-cart">
+            <div class="empty-cart-icon">⚠️</div>
+            <p>Error loading cart</p>
+            <p>Please try again later</p>
+            <button onclick="loadCart()" class="back-btn" style="margin-top: 20px;">Retry</button>
+          </div>
+        `;
+      }
+    }
+
+    // Update cart quantity
+    async function updateCartQuantity(productId, newQuantity) {
+      if (newQuantity < 1) {
+        await removeFromCart(productId);
+        return;
+      }
+
+      try {
+        // Calculate delta (difference from current)
+        const cartRes = await apiFetch("/api/cart/cart/list_items/");
+        if (!cartRes.ok) throw new Error("Failed to get cart");
+        
+        const cartData = await cartRes.json();
+        const currentItem = cartData.items.find(item => item.product === productId);
+        const currentQty = currentItem ? currentItem.quantity : 0;
+        const delta = newQuantity - currentQty;
+
+        const res = await apiFetch("/api/cart/cart/add_item/", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie('csrftoken')
+          },
+          body: JSON.stringify({
+            product: productId,
+            quantity: delta  // Send the delta
+          })
+        });
+
+        if (res.ok) {
+          showNotification(`Quantity updated successfully!`, "success");
+          loadCart();
+        } else {
+          const errorData = await res.json();
+          showNotification(errorData.detail || "Failed to update quantity", "error");
+        }
+      } catch (error) {
+        console.error("Error updating quantity:", error);
+        showNotification("Failed to update quantity", "error");
+      }
+    }
+
+    // Remove item from cart
+    async function removeFromCart(productId) {
+      if (!confirm("Are you sure you want to remove this item?")) {
+        return;
+      }
+
+      try {
+        const res = await apiFetch("/api/cart/cart/remove_item/", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie('csrftoken')
+          },
+          body: JSON.stringify({ product: productId })
+        });
+
+        if (res.ok) {
+          showNotification("Item removed from cart", "success");
+          loadCart();
+        } else {
+          const errorData = await res.json();
+          showNotification(errorData.detail || "Failed to remove item", "error");
+        }
+      } catch (error) {
+        console.error("Error removing item:", error);
+        showNotification("Failed to remove item", "error");
+      }
+    }
+
+    // Checkout function
+    function checkout() {
+      const total = parseFloat(document.getElementById("cart-total").textContent);
+      
+      if (total === 0 || isNaN(total)) {
+        showNotification("Your cart is empty!", "error");
+        return;
+      }
+
+      if (confirm(`Proceed to checkout with total: ₹${total.toFixed(2)}?`)) {
+        showNotification("Redirecting to checkout... 🚀", "success");
+         window.location.href = "/checkout/";
+      }
+    }
+
+    // Show notification
+    function showNotification(message, type = "success") {
+      const notification = document.getElementById("notification");
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.style.display = 'block';
+      
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000);
+    }
+
+    // Initialize cart on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      loadCart();
+    });
+
+  </script>
+</body>
+</html>

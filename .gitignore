@@ -8,7 +8,7 @@ important_cmds.txt
 .env
 # Django
 db.sqlite3
-staticfiles/
+
 media/
 
 # Environment
