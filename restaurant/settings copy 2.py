@@ -14,35 +14,27 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 if not SECRET_KEY:
     raise Exception("DJANGO_SECRET_KEY not set")
 
-# DEBUG को Railway variable से पढ़ो, default False (production safe)
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = True#os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [
-    'hungrio-production.up.railway.app',
-    '.up.railway.app',          # wildcard for Railway subdomains
-    'localhost',
-    '127.0.0.1',
-    '*',                        # temporary test के लिए (बाद में हटा दो)
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    'https://hungrio-production.up.railway.app',
-    'https://*.up.railway.app',
-]
+DJANGO_SETTINGS_MODULE = os.getenv(
+    "DJANGO_SETTINGS_MODULE", "restaurant.settings"
+)
+ALLOWED_HOSTS = ['hungrio-production.up.railway.app', '.up.railway.app', 'localhost', '127.0.0.1']
+#ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-# Production में True रखो (Railway HTTPS handle करता है)
-SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "False") == "True"
-SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "False") == "True"
-CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE", "False") == "True"
+SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT") == "True"
+SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE") == "True"
+CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE") == "True"
 
 # --------------------------------------------------
 # APPLICATIONS
 # --------------------------------------------------
 INSTALLED_APPS = [
-    # "jazzmin",  # commented out - remove permanently अगर issue दे रहा है
+   # "jazzmin",
 
     "django.contrib.admin",
     "django.contrib.auth",
@@ -118,7 +110,7 @@ TEMPLATES = [
 ]
 
 # --------------------------------------------------
-# DATABASE (Railway PostgreSQL)
+# DATABASE (Railway PostgreSQL auto vars)
 # --------------------------------------------------
 DATABASES = {
     "default": {
@@ -137,7 +129,10 @@ DATABASES = {
 # --------------------------------------------------
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -187,11 +182,6 @@ SIMPLE_JWT = {
 # CORS
 # --------------------------------------------------
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "https://hungrio-production.up.railway.app",
-    "http://localhost:3000",  # अगर frontend local में है
-    # और भी origins ऐड कर सकते हो
-]
 
 # --------------------------------------------------
 # EMAIL (Brevo SMTP)
