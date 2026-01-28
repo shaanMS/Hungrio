@@ -1,4 +1,4 @@
-const API_BASE = "http://127.0.0.1:2222";
+const API_BASE = "http://localhost:8889";
 var orderId = null;
 // DOM Elements
 const orderItemsEl = document.getElementById("order-items");
