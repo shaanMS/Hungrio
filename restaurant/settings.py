@@ -35,7 +35,7 @@ CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE") == "True"
 # APPLICATIONS
 # --------------------------------------------------
 INSTALLED_APPS = [
-    "jazzmin",
+   # "jazzmin",
 
     "django.contrib.admin",
     "django.contrib.auth",
