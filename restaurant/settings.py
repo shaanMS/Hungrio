@@ -14,7 +14,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 if not SECRET_KEY:
     raise Exception("DJANGO_SECRET_KEY not set")
 
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = True#os.getenv("DEBUG", "False") == "True"
 
 DJANGO_SETTINGS_MODULE = os.getenv(
     "DJANGO_SETTINGS_MODULE", "restaurant.settings"
