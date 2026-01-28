@@ -14,14 +14,4 @@ urlpatterns = [
 
 # page url group
 
-urlpatterns += [
-    
-    path("/myProfile"),
-    path(""),
-    path(""),
-    
-    
-    
-    ]
 
-x
