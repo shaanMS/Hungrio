@@ -1,1 +1,1 @@
-web: gunicorn restaurant.wsgi:application
+web: gunicorn yourproject.wsgi --log-level debug
