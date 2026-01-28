@@ -19,8 +19,9 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 DJANGO_SETTINGS_MODULE = os.getenv(
     "DJANGO_SETTINGS_MODULE", "restaurant.settings"
 )
+ALLOWED_HOSTS = ["*"]
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+#ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 USE_X_FORWARDED_HOST = True
