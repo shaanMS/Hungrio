@@ -9,7 +9,7 @@ djangorestframework-simplejwt>=5.3,<6.0
 django-allauth>=65.0,<66.0   # अगर social login इस्तेमाल कर रहे हो, वरना हटा दो
 gunicorn>=22.0,<23.0
 # Admin UI enhancements
-jazzmin>=3.0,<4.0
+#jazzmin>=3.0,<4.0
 
 # Security & CORS
 django-cors-headers>=4.0,<5.0
