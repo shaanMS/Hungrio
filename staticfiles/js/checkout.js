@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8889";
+const API_BASE = "https://hungrio-production.up.railway.app";
 var orderId = null;
 // DOM Elements
 const orderItemsEl = document.getElementById("order-items");
