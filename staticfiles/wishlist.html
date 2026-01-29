@@ -714,7 +714,7 @@
     // Check Authentication
     async function checkAuthStatus() {
       try {
-        const response = await apiFetch(`${API_BASE}/api/auth/me/`);
+        const response = await apiFetch(`${API_BASE}/account/api/auth/me/`);
         
         if (response.ok) {
           currentUser = await response.json();
