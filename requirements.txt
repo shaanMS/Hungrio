@@ -10,7 +10,7 @@ django-allauth>=65.0,<66.0   # अगर social login इस्तेमाल �
 gunicorn>=22.0,<23.0
 # Admin UI enhancements
 #jazzmin>=3.0,<4.0
-
+stripe>=10.0,<11.0 
 # Security & CORS
 django-cors-headers>=4.0,<5.0
 django-csp>=4.0,<5.0

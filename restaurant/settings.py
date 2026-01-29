@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     "csp",
     "django_filters",
     "channels",
-    "django_ratelimit",
+   # "django_ratelimit",
     "django_celery_beat",
     "rest_framework_simplejwt",
 
