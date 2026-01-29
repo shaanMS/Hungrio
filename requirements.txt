@@ -10,7 +10,12 @@ django-allauth>=65.0,<66.0   # अगर social login इस्तेमाल �
 gunicorn>=22.0,<23.0
 # Admin UI enhancements
 #jazzmin>=3.0,<4.0
+<<<<<<< HEAD
 stripe>=10.0,<11.0 
+=======
+# पहले से जो packages हैं, उनमें ये ऐड करो
+stripe>=10.0,<11.0   # latest stable, या stripe==8.0.0 अगर पुराना version चाहिए
+>>>>>>> f6ace98ee09aea45157ae2f31b5c08266e9b4b46
 # Security & CORS
 django-cors-headers>=4.0,<5.0
 django-csp>=4.0,<5.0

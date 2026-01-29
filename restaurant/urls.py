@@ -5,12 +5,20 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 
 )
+from django.http import HttpResponse
 from django.conf import settings
 from django.views.generic import TemplateView
 from checkout_and_billing.views import checkout_view
 from django.conf.urls.static import static
 
+
+
+def test_root(request):
+    return HttpResponse("<h1>Django server is running on Railway! Test successful.</h1>")
+
+
 urlpatterns = [
+  #  path('', test_root, name='test_root'),  # root URL पर simple text
     path('admin/', admin.site.urls),
 
     # ---------- UI PAGES ----------
