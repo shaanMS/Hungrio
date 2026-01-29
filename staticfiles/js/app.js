@@ -1,5 +1,5 @@
 async function checkUser() {
-  const res = await apiFetch("/api/auth/me/");
+  const res = await apiFetch("/account/api/auth/me/");
   const box = document.getElementById("user-status");
 
   if (res.ok) {
