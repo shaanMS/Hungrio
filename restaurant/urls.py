@@ -28,7 +28,7 @@ urlpatterns = [
     # ---------- AUTH APIs ----------
     path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('', include('accounts.urls')),   # /api/auth/me/
+ #   path('', include('accounts.urls')),   # /api/auth/me/
     path("api/checkout/", include("checkout_and_billing.urls")),
     path("api/order-payment/", include("order_payment.urls")),
     
