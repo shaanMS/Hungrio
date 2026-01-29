@@ -8,9 +8,10 @@ important_cmds.txt
 .env
 # Django
 db.sqlite3
-
+.sql
 media/
 
 # Environment
 .env
 venv/
+restaurant_dump.sql

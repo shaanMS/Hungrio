@@ -18,7 +18,7 @@ def test_root(request):
 
 
 urlpatterns = [
-  #  path('', test_root, name='test_root'),  # root URL पर simple text
+    #path('', test_root, name='test_root'),  # root URL पर simple text
     path('admin/', admin.site.urls),
 
     # ---------- UI PAGES ----------
@@ -32,7 +32,7 @@ urlpatterns = [
     TemplateView.as_view(template_name="order_status.html"),
     name="order_status"
 ),
-
+ 
     # ---------- AUTH APIs ----------
     path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

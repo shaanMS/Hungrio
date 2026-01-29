@@ -25,10 +25,13 @@ ALLOWED_HOSTS = [
     '*',                        # temporary test के लिए (बाद में हटा दो)
 ]
 
+
+
 CSRF_TRUSTED_ORIGINS = [
     'https://hungrio-production.up.railway.app',
     'https://*.up.railway.app',
 ]
+
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -238,13 +241,85 @@ CELERY_TIMEZONE = "Asia/Kolkata"
 # --------------------------------------------------
 # CSP (SAFE)
 # --------------------------------------------------
+# --------------------------------------------------
+# CONTENT SECURITY POLICY (FULL – COPY & PASTE)
+# --------------------------------------------------
+
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
-        "default-src": ["'self'"],
-        "script-src": ["'self'", "https://js.stripe.com"],
-        "style-src": ["'self'", "'unsafe-inline'"],
-        "img-src": ["'self'", "data:"],
-        "frame-src": ["https://js.stripe.com"],
+
+        # Default
+        "default-src": [
+            "'self'",
+        ],
+
+        # JavaScript
+        "script-src": [
+            "'self'",
+            "https://js.stripe.com",
+            "'unsafe-inline'",   # HTML onclick / inline scripts (later remove)
+        ],
+
+        # CSS
+        "style-src": [
+            "'self'",
+            "'unsafe-inline'",
+            "https://fonts.googleapis.com",
+            "https://cdnjs.cloudflare.com",
+        ],
+
+        # Fonts
+        "font-src": [
+            "'self'",
+            "https://fonts.gstatic.com",
+            "https://cdnjs.cloudflare.com",
+        ],
+
+        # Images / Icons
+        "img-src": [
+            "'self'",
+            "data:",
+            "blob:",
+        ],
+
+        # Stripe iframe / checkout
+        "frame-src": [
+            "https://js.stripe.com",
+        ],
+
+        # API / AJAX / Fetch / WebSocket
+        "connect-src": [
+            "'self'",
+            "https://hungrio-production.up.railway.app",
+            "https://api.stripe.com",
+            "wss://hungrio-production.up.railway.app",
+        ],
+
+        # Forms (POST, login, payment)
+        "form-action": [
+            "'self'",
+            "https://api.stripe.com",
+        ],
+
+        # Media (future-proof)
+        "media-src": [
+            "'self'",
+        ],
+
+        # Objects (disable Flash etc.)
+        "object-src": [
+            "'none'",
+        ],
+
+        # Base URI
+        "base-uri": [
+            "'self'",
+        ],
+
+        # Clickjacking protection
+        "frame-ancestors": [
+            "'self'",
+        ],
     }
 }
 
