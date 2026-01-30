@@ -38,7 +38,7 @@
 from celery import shared_task
 from order.models import Order
 from order_payment.models import PaymentTransaction
-from brevo import send_brevo_email
+from order.brevo import send_brevo_email
 
 
 @shared_task(
