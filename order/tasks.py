@@ -20,14 +20,9 @@ Order ID: {order.id}
 Order Status: {order.status}
 Payment Status: {payment.status}
 Amount Paid: ₹{order.total_amount}
-FRONTEND_URL = settings.__dict__.get("FRONTEND_URL", "")
-if FRONTEND_URL:
-          View Order:
-                    {settings.FRONTEND_URL}/order-status/{order.id}
-
-                 Thank you for shopping with us!
-            """
+"""
     if order.email_sent:
+     print('---------------------00000000000000000000000000000000000----------------------------------------')
      return "Email already sent"
     send_mail(
         subject,
