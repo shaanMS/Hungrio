@@ -232,7 +232,7 @@ CHANNEL_LAYERS = {
 }
 
 
-BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+BREVO_API_KEY = os.getenv("hungrio_brevo")
 BREVO_SENDER_EMAIL = os.getenv("BREVO_SENDER_EMAIL")
 BREVO_SENDER_NAME = os.getenv("BREVO_SENDER_NAME")
 
