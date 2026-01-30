@@ -259,8 +259,8 @@ def stripe_webhook(request):
         )
 
         print("✅ Order & Payment updated in DB")
-        send_order_confirmation_email.delay(order_id,payment_id)
-
+        send_order_confirmation_email(order_id,payment_id)
+        print("*******************************************")
        #generating invoice
         generate_invoice.delay(order_id)
     # -------------------------
