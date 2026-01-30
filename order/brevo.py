@@ -11,8 +11,9 @@ def send_brevo_email(
 ):
     headers = {
         "accept": "application/json",
-        "api-key": settings.BREVO_API_KEY,
+    
         "content-type": "application/json",
+        "api-key": settings.BREVO_API_KEY,
     }
 
     payload = {
@@ -40,3 +41,6 @@ def send_brevo_email(
         )
 
     return response.json()
+
+
+
