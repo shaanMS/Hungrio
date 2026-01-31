@@ -22,10 +22,12 @@ class UserProfile(models.Model):
     state = models.CharField(max_length=100)
     pincode = models.CharField(max_length=10)
     country = models.CharField(max_length=50, default="India")
-
+    
     created_at = models.DateTimeField(auto_now_add=True)
     profile_filled_count = models.PositiveSmallIntegerField(default=0)
     profile_completion_percent = models.PositiveSmallIntegerField(default=0)
+    user_onboarding_message = models.BooleanField(default=False)
+    
     def __str__(self):
         return f"{self.user.email}"
     

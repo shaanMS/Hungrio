@@ -62,7 +62,7 @@ INSTALLED_APPS = [
    # "django_ratelimit",
     "django_celery_beat",
     "rest_framework_simplejwt",
-
+     "captcha",
     "restaurant",
     "accounts",
     "customer",
@@ -332,3 +332,8 @@ CONTENT_SECURITY_POLICY = {
 
 # --------------------------------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+CAPTCHA_IMAGE_SIZE = (100, 40)
+CAPTCHA_LENGTH = 4
+CAPTCHA_TIMEOUT = 5 * 60

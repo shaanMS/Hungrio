@@ -10,7 +10,7 @@ from django.conf import settings
 from django.views.generic import TemplateView
 from checkout_and_billing.views import checkout_view
 from django.conf.urls.static import static
-
+from accounts.CaptchaView import CaptchaTokenView 
 
 
 def test_root(request):
@@ -23,7 +23,8 @@ urlpatterns = [
 
     # ---------- UI PAGES ----------
     path('', TemplateView.as_view(template_name='index.html'), name='home'),   # HOME
-    path('login/', TemplateView.as_view(template_name='login.html'), name='login'),
+    # path('login/', TemplateView.as_view(template_name='login.html'), name='login'),
+    path('login/',LoginPageView.as_view(), name="login"),
     path("cart/", TemplateView.as_view(template_name="cart.html"), name="cart"),
     path("wishlist/", TemplateView.as_view(template_name="wishlist.html")),
     path("checkout/", checkout_view, name="checkout"),   # ✅ FIXED
@@ -32,13 +33,20 @@ urlpatterns = [
     TemplateView.as_view(template_name="order_status.html"),
     name="order_status"
 ),
+    
  
     # ---------- AUTH APIs ----------
-    path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path(
+    'api/auth/login/',
+    CaptchaTokenView.as_view(),
+    name='token_obtain_pair'
+),
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('account/', include('accounts.urls')),   # /api/auth/me/
+    path('account/', include('accounts.urls')),   # account/api/auth/me/
     path("api/checkout/", include("checkout_and_billing.urls")),
     path("api/order-payment/", include("order_payment.urls")),
+    # path('api/captcha/', include('captcha.urls')),
     
     # ---------- APP APIs ----------
     path('api/products/', include('product.urls')),

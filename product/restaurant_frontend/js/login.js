@@ -2,11 +2,13 @@ async function login()
 {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
+  const captchaKey = document.getElementById("captcha_key").value;
+  const captchaValue = document.getElementById("captcha_value").value;
 
   const res = await fetch("/api/auth/login/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
+    body: JSON.stringify({ username, password ,captchaKey, captchaValue})
   });
 
   if (!res.ok) 
