@@ -46,7 +46,7 @@ urlpatterns = [
     path('account/', include('accounts.urls')),   # account/api/auth/me/
     path("api/checkout/", include("checkout_and_billing.urls")),
     path("api/order-payment/", include("order_payment.urls")),
-    path('api/captcha/', include('captcha.urls')),
+    path('captcha/', include('captcha.urls')),
     
     # ---------- APP APIs ----------
     path('api/products/', include('product.urls')),
