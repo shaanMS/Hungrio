@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 from checkout_and_billing.views import checkout_view
 from django.conf.urls.static import static
 from accounts.CaptchaView import CaptchaTokenView 
-
+from accounts.CustomLoginView import LoginPageView
 
 def test_root(request):
     return HttpResponse("<h1>Django server is running on Railway! Test successful.</h1>")
