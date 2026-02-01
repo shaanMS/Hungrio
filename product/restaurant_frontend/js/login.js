@@ -93,26 +93,86 @@ async function login() {
   }
 }
 
+// async function loadCaptcha() {
+//   try {
+//     const res = await fetch("/api/captcha/");
+//     if (!res.ok) {
+//       throw new Error("Captcha load failed");
+//     }
+
+//     const data = await res.json();
+
+//     document.getElementById("captcha-img").src = data.captcha_image;
+//     document.getElementById("captcha_key").value = data.captcha_key;
+//     document.getElementById("captcha_value").value = ""; // clear old input
+
+
+//     // for dbugging
+//     imgElement.onload = () => console.log("Captcha image loaded successfully!");
+//     imgElement.onerror = () => console.log("Captcha image failed to load!");
+//   } catch (error) {
+//     console.error("Captcha error:", error);
+//   }
+// }
+
+// window.addEventListener("load", loadCaptcha);
+
+
+
+
 async function loadCaptcha() {
   try {
+    console.log("Starting captcha load...");
+
     const res = await fetch("/api/captcha/");
+    console.log("Captcha fetch status:", res.status);
+
     if (!res.ok) {
+      const errText = await res.text();
+      console.error("Captcha API failed:", res.status, errText);
       throw new Error("Captcha load failed");
     }
 
     const data = await res.json();
+    console.log("Captcha data:", data);
 
-    document.getElementById("captcha-img").src = data.captcha_image;
-    document.getElementById("captcha_key").value = data.captcha_key;
-    document.getElementById("captcha_value").value = ""; // clear old input
+    // Image element ko yahan se pakdo
+    const img = document.getElementById("captcha-img");
+    if (!img) {
+      console.error("Captcha img element not found in DOM!");
+      return;
+    }
 
+    // Src set karo
+    img.src = data.captcha_image;
+    console.log("Setting captcha src to:", data.captcha_image);
 
-    // for dbugging
-    imgElement.onload = () => console.log("Captcha image loaded successfully!");
-    imgElement.onerror = () => console.log("Captcha image failed to load!");
+    // Hidden key set
+    const keyInput = document.getElementById("captcha_key");
+    if (keyInput) keyInput.value = data.captcha_key;
+
+    // Clear input
+    const valueInput = document.getElementById("captcha_value");
+    if (valueInput) valueInput.value = "";
+
+    // Debug load events (ab sahi variable use kar rahe)
+    img.onload = () => {
+      console.log("Captcha image LOADED successfully!");
+    };
+
+    img.onerror = (e) => {
+      console.error("Captcha image FAILED to load:", e);
+      // Fallback dikhane ke liye (test ke liye)
+      img.src = "https://via.placeholder.com/280x80?text=Image+Load+Failed";
+    };
+
   } catch (error) {
-    console.error("Captcha error:", error);
+    console.error("Captcha loading error:", error);
   }
 }
 
-window.addEventListener("load", loadCaptcha);
+// Window load pe call
+window.addEventListener("load", () => {
+  console.log("Window fully loaded – calling loadCaptcha()");
+  loadCaptcha();
+});
