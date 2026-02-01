@@ -47,7 +47,7 @@ urlpatterns = [
     path('account/', include('accounts.urls')),   # account/api/auth/me/
     path("api/checkout/", include("checkout_and_billing.urls")),
     path("api/order-payment/", include("order_payment.urls")),
-    #path('captcha/', include('captcha.urls')),#use in caseof mvtpure not in case of api
+    path('captcha/', include('captcha.urls')),#use in caseof mvtpure not in case of api
     path("api/captcha/", CaptchaAPIView.as_view()), #v
 
     # ---------- APP APIs ----------
