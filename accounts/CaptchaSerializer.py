@@ -71,5 +71,9 @@ class CaptchaJWTSerializer(TokenObtainPairSerializer):
             captcha.delete()   # 🔥 one-time use
         except CaptchaStore.DoesNotExist:
             raise serializers.ValidationError("Captcha expired")
+       
+        if captcha.response.lower() != captcha_value.lower():
+            raise serializers.ValidationError("Invalid captcha")
 
+        captcha.delete()  # ✅ one-time use
         return super().validate(attrs)

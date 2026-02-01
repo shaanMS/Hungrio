@@ -1,5 +1,5 @@
 from rest_framework_simplejwt.views import TokenObtainPairView
-from accounts import CaptchaSerializer
+from accounts.CaptchaSerializer import CaptchaSerializer
 
 
 
