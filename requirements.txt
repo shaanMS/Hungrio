@@ -12,8 +12,7 @@ gunicorn>=22.0,<23.0
 #jazzmin>=3.0,<4.0
 
 stripe>=10.0,<11.0 
-
-
+pillow
 # Security & CORS
 django-cors-headers>=4.0,<5.0
 django-csp>=4.0,<5.0
