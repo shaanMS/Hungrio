@@ -1,6 +1,30 @@
+# # from rest_framework import serializers
+# # from captcha.models import CaptchaStore
+# # from captcha.helpers import captcha_image_url
+# # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+# # class CaptchaJWTSerializer(TokenObtainPairSerializer):
+# #     captcha_key = serializers.CharField()
+# #     captcha_value = serializers.CharField()
+
+# #     def validate(self, attrs):
+# #         captcha_key = attrs.pop('captcha_key')
+# #         captcha_value = attrs.pop('captcha_value')
+
+# #         # captcha verify
+# #         if not CaptchaStore.objects.filter(
+# #             hashkey=captcha_key,
+# #             response=captcha_value
+# #         ).exists():
+# #             raise serializers.ValidationError("Invalid captcha")
+
+# #         return super().validate(attrs)
+
+
+
+
 # from rest_framework import serializers
 # from captcha.models import CaptchaStore
-# from captcha.helpers import captcha_image_url
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 # class CaptchaJWTSerializer(TokenObtainPairSerializer):
@@ -8,24 +32,28 @@
 #     captcha_value = serializers.CharField()
 
 #     def validate(self, attrs):
-#         captcha_key = attrs.pop('captcha_key')
-#         captcha_value = attrs.pop('captcha_value')
+#         captcha_key = attrs.pop("captcha_key")
+#         captcha_value = attrs.pop("captcha_value")
 
-#         # captcha verify
-#         if not CaptchaStore.objects.filter(
-#             hashkey=captcha_key,
-#             response=captcha_value
-#         ).exists():
+#         try:
+#             captcha = CaptchaStore.objects.get(hashkey=captcha_key)
+#         except CaptchaStore.DoesNotExist:
+#             raise serializers.ValidationError("Captcha expired")
+
+#         if captcha.response.lower() != captcha_value.lower():
 #             raise serializers.ValidationError("Invalid captcha")
 
-#         return super().validate(attrs)
+#         captcha.delete()  # 🔥 IMPORTANT (one-time use)
 
+#        return super().validate(attrs)
+    
 
 
 
 from rest_framework import serializers
 from captcha.models import CaptchaStore
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 
 class CaptchaJWTSerializer(TokenObtainPairSerializer):
     captcha_key = serializers.CharField()
@@ -35,14 +63,13 @@ class CaptchaJWTSerializer(TokenObtainPairSerializer):
         captcha_key = attrs.pop("captcha_key")
         captcha_value = attrs.pop("captcha_value")
 
+        # 🔐 Captcha validation
         try:
             captcha = CaptchaStore.objects.get(hashkey=captcha_key)
+            if captcha.response != captcha_value:
+                raise serializers.ValidationError("Invalid captcha")
+            captcha.delete()   # 🔥 one-time use
         except CaptchaStore.DoesNotExist:
             raise serializers.ValidationError("Captcha expired")
-
-        if captcha.response.lower() != captcha_value.lower():
-            raise serializers.ValidationError("Invalid captcha")
-
-        captcha.delete()  # 🔥 IMPORTANT (one-time use)
 
         return super().validate(attrs)

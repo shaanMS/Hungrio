@@ -47,7 +47,8 @@ urlpatterns = [
     path("api/checkout/", include("checkout_and_billing.urls")),
     path("api/order-payment/", include("order_payment.urls")),
     path('captcha/', include('captcha.urls')),
-    
+    path("api/", CaptchaAPIView.as_view()),
+
     # ---------- APP APIs ----------
     path('api/products/', include('product.urls')),
     path('api/cart/', include('cart.urls')),
