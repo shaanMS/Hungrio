@@ -75,5 +75,5 @@ class CaptchaJWTSerializer(TokenObtainPairSerializer):
         if captcha.response.lower() != captcha_value.lower():
             raise serializers.ValidationError("Invalid captcha")
 
-        captcha.delete()  # ✅ one-time use
+        # captcha.delete()  # ✅ one-time use
         return super().validate(attrs)
