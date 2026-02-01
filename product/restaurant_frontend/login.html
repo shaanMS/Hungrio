@@ -3,20 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Secure Cartoon Network Login</title>
-  <!-- Security-focused CSP meta tag -->
-  <meta http-equiv="Content-Security-Policy" 
-        content="default-src 'self'; 
-                 script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; 
-                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-                 font-src 'self' https://fonts.gstatic.com; 
-                 img-src 'self' data: https:; 
-                 connect-src 'self'">
+  <title>Login | System Access</title>
   
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@300;400;500;600;700&display=swap');
-    
-    /* Reset and base */
+    /* Reset and Base */
     * {
       margin: 0;
       padding: 0;
@@ -24,375 +14,247 @@
       -webkit-tap-highlight-color: transparent;
     }
     
+    :root {
+      --orange: #DEAA79;
+      --yellow: #FFE6A9;
+      --sage: #B1C29E;
+      --teal: #659287;
+      --orange-rgb: 222, 170, 121;
+      --yellow-rgb: 255, 230, 169;
+      --sage-rgb: 177, 194, 158;
+      --teal-rgb: 101, 146, 135;
+      --dark-teal: #4A7668;
+      --light-bg: #F8F9FA;
+      --border-color: #E0E0E0;
+      --text-dark: #333333;
+      --text-light: #666666;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+    }
+    
     body {
-      background: linear-gradient(135deg, #434E78 0%, #607B8F 100%);
+      background: linear-gradient(135deg, var(--light-bg) 0%, #FFFFFF 100%);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Poppins', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
       padding: 20px;
-      position: relative;
-      overflow-x: hidden;
+      line-height: 1.6;
     }
     
-    /* Animated background elements */
-    .bg-shape {
-      position: fixed;
-      border-radius: 50%;
-      opacity: 0.1;
-      z-index: -1;
-      animation: float 20s infinite linear;
-    }
-    
-    .shape-1 {
-      width: 300px;
-      height: 300px;
-      background: #F7E396;
-      top: 10%;
-      left: 5%;
-      animation-delay: 0s;
-    }
-    
-    .shape-2 {
-      width: 200px;
-      height: 200px;
-      background: #E97F4A;
-      bottom: 10%;
-      right: 8%;
-      animation-delay: 5s;
-      animation-direction: reverse;
-    }
-    
-    .shape-3 {
-      width: 150px;
-      height: 150px;
-      background: #434E78;
-      top: 60%;
-      left: 80%;
-      animation-delay: 10s;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      25% { transform: translate(20px, -20px) rotate(90deg); }
-      50% { transform: translate(-10px, 10px) rotate(180deg); }
-      75% { transform: translate(-20px, -10px) rotate(270deg); }
-    }
-    
-    /* Main login container */
+    /* Main Container */
     .login-container {
       width: 100%;
       max-width: 420px;
-      animation: fadeIn 0.6s ease-out;
     }
     
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
+    /* Login Card */
     .login-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 24px;
-      padding: 40px 35px;
-      box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.25),
-        0 0 0 1px rgba(255, 255, 255, 0.1),
-        0 8px 32px rgba(67, 78, 120, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      position: relative;
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
       overflow: hidden;
-    }
-    
-    .login-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #E97F4A, #F7E396, #434E78);
-      z-index: 1;
+      border: 1px solid var(--border-color);
     }
     
     /* Header */
-    .header {
+    .login-header {
+      background: linear-gradient(135deg, var(--teal), var(--dark-teal));
+      color: white;
+      padding: 32px 40px;
       text-align: center;
-      margin-bottom: 32px;
-      position: relative;
     }
     
-    .logo-container {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #434E78, #607B8F);
-      width: 80px;
-      height: 80px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 20px rgba(67, 78, 120, 0.3);
-      animation: gentlePulse 4s infinite ease-in-out;
+    .logo {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: inline-block;
     }
     
-    @keyframes gentlePulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-    
-    .logo-icon {
-      font-size: 42px;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
-    }
-    
-    .title {
-      font-family: 'Fredoka One', cursive;
-      font-size: 2.5rem;
-      background: linear-gradient(135deg, #434E78, #E97F4A);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .login-title {
+      font-size: 24px;
+      font-weight: 600;
       margin-bottom: 8px;
-      letter-spacing: 0.5px;
     }
     
-    .subtitle {
-      color: #607B8F;
-      font-size: 0.95rem;
-      font-weight: 500;
-      opacity: 0.8;
+    .login-subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      font-weight: 400;
     }
     
-    /* Form elements */
+    /* Form Area */
+    .login-form {
+      padding: 40px;
+    }
+    
+    /* Form Groups */
     .form-group {
       margin-bottom: 24px;
-      position: relative;
     }
     
-    .input-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #434E78;
-      font-size: 0.9rem;
+    .form-label {
+      display: block;
+      color: var(--text-dark);
+      font-size: 14px;
       font-weight: 600;
-      margin-bottom: 10px;
-      letter-spacing: 0.3px;
+      margin-bottom: 8px;
     }
     
-    .input-icon {
-      font-size: 1.1rem;
-    }
-    
-    .input-field {
+    .form-input {
       width: 100%;
-      padding: 16px 20px 16px 48px;
-      background: #F9FAFB;
-      border: 2px solid #E5E7EB;
-      border-radius: 14px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 1rem;
-      color: #434E78;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      outline: none;
-    }
-    
-    .input-field:focus {
-      border-color: #607B8F;
+      padding: 14px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.2s;
       background: white;
-      box-shadow: 0 0 0 4px rgba(96, 123, 143, 0.1);
     }
     
-    .input-field::placeholder {
-      color: #9CA3AF;
+    .form-input:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(var(--teal-rgb), 0.1);
     }
     
-    .input-wrapper {
+    .form-input.error {
+      border-color: #DC2626;
+      background: #FEF2F2;
+    }
+    
+    /* Password Wrapper */
+    .password-wrapper {
       position: relative;
     }
     
-    .input-prefix-icon {
+    .toggle-password {
       position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #607B8F;
-      font-size: 1.2rem;
-      pointer-events: none;
-    }
-    
-    /* Password toggle */
-    .password-toggle {
-      position: absolute;
-      right: 18px;
+      right: 12px;
       top: 50%;
       transform: translateY(-50%);
       background: none;
       border: none;
-      color: #9CA3AF;
+      color: var(--text-light);
       cursor: pointer;
-      font-size: 1.2rem;
       padding: 4px;
-      transition: color 0.2s;
-      border-radius: 4px;
+      font-size: 18px;
     }
     
-    .password-toggle:hover {
-      color: #434E78;
-      background: rgba(67, 78, 120, 0.05);
+    .toggle-password:hover {
+      color: var(--teal);
     }
     
-    /* CAPTCHA Section */
+    /* Error Message */
+    .error-message {
+      color: #DC2626;
+      font-size: 13px;
+      margin-top: 6px;
+      display: none;
+    }
+    
+    /* Captcha Section */
     .captcha-section {
-      background: #F8F9FA;
-      border-radius: 14px;
+      background: var(--light-bg);
+      border-radius: 8px;
       padding: 20px;
-      margin: 28px 0;
-      border: 2px solid #E5E7EB;
-      transition: border-color 0.3s;
-    }
-    
-    .captcha-section.loading {
-      opacity: 0.7;
-      pointer-events: none;
+      margin: 30px 0;
+      border: 1px solid var(--border-color);
     }
     
     .captcha-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       margin-bottom: 16px;
     }
     
     .captcha-title {
-      color: #434E78;
-      font-size: 0.95rem;
+      font-size: 14px;
       font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      color: var(--text-dark);
     }
     
-    .captcha-refresh {
-      background: #607B8F;
+    .refresh-captcha {
+      background: var(--sage);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       padding: 8px 16px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
       display: flex;
       align-items: center;
       gap: 6px;
+      transition: background 0.2s;
     }
     
-    .captcha-refresh:hover:not(:disabled) {
-      background: #434E78;
-      transform: translateY(-1px);
+    .refresh-captcha:hover:not(:disabled) {
+      background: var(--teal);
     }
     
-    .captcha-refresh:disabled {
-      opacity: 0.5;
+    .refresh-captcha:disabled {
+      opacity: 0.6;
       cursor: not-allowed;
     }
     
-    .captcha-refresh i {
-      font-size: 0.9rem;
-    }
-    
-    .captcha-container {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+    .captcha-image-container {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 16px;
       margin-bottom: 16px;
       min-height: 80px;
-    }
-    
-    .captcha-image {
-      flex: 1;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 2px solid #E5E7EB;
-      background: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 80px;
       position: relative;
-    }
-    
-    .captcha-image img {
-      max-width: 100%;
-      height: auto;
-      display: block;
     }
     
     .captcha-loader {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 30px;
-      height: 30px;
-      border: 3px solid rgba(233, 127, 74, 0.2);
-      border-top-color: #E97F4A;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(var(--teal-rgb), 0.2);
+      border-top-color: var(--teal);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       display: none;
     }
     
     @keyframes spin {
-      to { transform: translate(-50%, -50%) rotate(360deg); }
+      to { transform: rotate(360deg); }
     }
     
-    .captcha-input {
-      width: 100%;
-      padding: 16px 20px;
-      background: white;
-      border: 2px solid #E5E7EB;
-      border-radius: 14px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 1rem;
-      color: #434E78;
-      transition: all 0.3s;
-      outline: none;
+    #captchaImage {
+      max-width: 100%;
+      height: auto;
     }
     
-    .captcha-input:focus {
-      border-color: #E97F4A;
-      box-shadow: 0 0 0 4px rgba(233, 127, 74, 0.1);
-    }
-    
-    /* Submit button */
+    /* Submit Button */
     .submit-btn {
       width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #434E78 0%, #607B8F 100%);
+      padding: 16px;
+      background: linear-gradient(135deg, var(--teal), var(--dark-teal));
       color: white;
       border: none;
-      border-radius: 14px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 1.1rem;
+      border-radius: 8px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      margin-top: 10px;
-      position: relative;
-      overflow: hidden;
     }
     
     .submit-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(67, 78, 120, 0.25);
+      background: linear-gradient(135deg, var(--dark-teal), var(--teal));
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
     }
     
     .submit-btn:active:not(:disabled) {
@@ -400,29 +262,14 @@
     }
     
     .submit-btn:disabled {
-      opacity: 0.7;
+      opacity: 0.6;
       cursor: not-allowed;
       transform: none !important;
     }
     
-    .submit-btn::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.7s;
-    }
-    
-    .submit-btn:hover:not(:disabled)::after {
-      left: 100%;
-    }
-    
     .btn-loader {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border: 2px solid rgba(255, 255, 255, 0.3);
       border-top-color: white;
       border-radius: 50%;
@@ -430,232 +277,164 @@
       display: none;
     }
     
-    /* Status messages */
+    /* Status Message */
     .status-message {
-      text-align: center;
+      padding: 14px;
+      border-radius: 8px;
       margin-top: 20px;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-weight: 500;
+      font-size: 14px;
+      text-align: center;
       display: none;
-      animation: slideUp 0.3s ease-out;
-    }
-    
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
     
     .status-success {
-      background: rgba(16, 185, 129, 0.1);
-      color: #065F46;
-      border: 1px solid rgba(16, 185, 129, 0.2);
+      background: #DCFCE7;
+      color: #166534;
+      border: 1px solid #BBF7D0;
     }
     
     .status-error {
-      background: rgba(239, 68, 68, 0.1);
+      background: #FEE2E2;
       color: #991B1B;
-      border: 1px solid rgba(239, 68, 68, 0.2);
+      border: 1px solid #FECACA;
     }
     
     .status-warning {
-      background: rgba(245, 158, 11, 0.1);
+      background: #FEF3C7;
       color: #92400E;
-      border: 1px solid rgba(245, 158, 11, 0.2);
+      border: 1px solid #FDE68A;
     }
     
     /* Footer */
-    .footer {
+    .login-footer {
       text-align: center;
-      margin-top: 24px;
-      color: #6B7280;
-      font-size: 0.85rem;
-      opacity: 0.8;
+      padding: 20px 40px;
+      border-top: 1px solid var(--border-color);
+      background: var(--light-bg);
+      font-size: 13px;
+      color: var(--text-light);
     }
     
-    /* Security badge */
     .security-badge {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(16, 185, 129, 0.1);
-      color: #065F46;
+      background: white;
       padding: 6px 12px;
       border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      border: 1px solid rgba(16, 185, 129, 0.2);
+      border: 1px solid var(--border-color);
+      margin-top: 10px;
     }
     
     /* Responsive */
     @media (max-width: 480px) {
-      .login-card {
+      .login-header {
+        padding: 24px 20px;
+      }
+      
+      .login-form {
         padding: 30px 20px;
       }
       
-      .captcha-container {
-        flex-direction: column;
-        gap: 15px;
-      }
-      
-      .captcha-image {
-        width: 100%;
-      }
-      
-      .title {
-        font-size: 2rem;
+      .login-footer {
+        padding: 20px;
       }
     }
     
-    /* Accessibility */
-    .visually-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+    /* Hidden Elements */
+    .hidden {
+      display: none !important;
     }
     
-    /* Error state */
-    .input-field.error {
-      border-color: #EF4444;
-      background: rgba(239, 68, 68, 0.02);
-    }
-    
-    .error-message {
-      color: #EF4444;
-      font-size: 0.8rem;
-      margin-top: 6px;
-      display: none;
-    }
-    
-    /* Success state */
-    .input-field.success {
-      border-color: #10B981;
+    /* Focus Styles */
+    .form-input:focus,
+    .refresh-captcha:focus,
+    .submit-btn:focus,
+    .toggle-password:focus {
+      outline: 2px solid var(--teal);
+      outline-offset: 2px;
     }
   </style>
-  
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <!-- Background shapes -->
-  <div class="bg-shape shape-1"></div>
-  <div class="bg-shape shape-2"></div>
-  <div class="bg-shape shape-3"></div>
-  
-  <!-- Main login container -->
   <div class="login-container">
     <div class="login-card">
-      <!-- Security badge -->
-      <div class="security-badge">
-        <i class="fas fa-shield-alt"></i>
-        <span>Secure Connection</span>
-      </div>
-      
       <!-- Header -->
-      <div class="header">
-        <div class="logo-container">
-          <span class="logo-icon">🎪</span>
-        </div>
-        <h1 class="title">Secure Login</h1>
-        <p class="subtitle">Access your cartoon network account</p>
+      <div class="login-header">
+        <div class="logo">🔐</div>
+        <h1 class="login-title">System Login</h1>
+        <p class="login-subtitle">Secure access to your account</p>
       </div>
       
-      <!-- Status message container -->
-      <div id="statusMessage" class="status-message"></div>
-      
-      <!-- Login Form -->
-      <form id="loginForm" novalidate>
+      <!-- Form -->
+      <form id="loginForm" class="login-form" novalidate>
+        <!-- Status Message -->
+        <div id="statusMessage" class="status-message"></div>
+        
         <!-- Username -->
         <div class="form-group">
-          <label class="input-label">
-            <span class="input-icon">👤</span>
+          <label for="username" class="form-label">
             Username
           </label>
-          <div class="input-wrapper">
-            <div class="input-prefix-icon">
-              <i class="fas fa-user"></i>
-            </div>
-            <input 
-              type="text" 
-              id="username" 
-              class="input-field"
-              placeholder="Enter your username"
-              autocomplete="username"
-              required
-              aria-describedby="usernameError"
-            >
-          </div>
-          <div id="usernameError" class="error-message" role="alert"></div>
+          <input 
+            type="text" 
+            id="username" 
+            class="form-input"
+            placeholder="Enter your username"
+            autocomplete="username"
+            required
+            autocapitalize="none"
+          >
+          <div id="usernameError" class="error-message"></div>
         </div>
         
         <!-- Password -->
         <div class="form-group">
-          <label class="input-label">
-            <span class="input-icon">🔒</span>
+          <label for="password" class="form-label">
             Password
           </label>
-          <div class="input-wrapper">
-            <div class="input-prefix-icon">
-              <i class="fas fa-lock"></i>
-            </div>
+          <div class="password-wrapper">
             <input 
               type="password" 
               id="password" 
-              class="input-field"
+              class="form-input"
               placeholder="Enter your password"
               autocomplete="current-password"
               required
-              aria-describedby="passwordError"
             >
             <button 
               type="button" 
-              class="password-toggle" 
+              class="toggle-password"
               id="togglePassword"
               aria-label="Show password"
             >
-              <i class="fas fa-eye"></i>
+              👁️
             </button>
           </div>
-          <div id="passwordError" class="error-message" role="alert"></div>
+          <div id="passwordError" class="error-message"></div>
         </div>
         
-        <!-- CAPTCHA Section -->
-        <div class="captcha-section" id="captchaSection">
+        <!-- CAPTCHA -->
+        <div class="captcha-section">
           <div class="captcha-header">
-            <div class="captcha-title">
-              <i class="fas fa-robot"></i>
-              <span>Security Verification</span>
-            </div>
+            <div class="captcha-title">Security Verification</div>
             <button 
               type="button" 
-              class="captcha-refresh" 
+              class="refresh-captcha"
               id="refreshCaptcha"
-              aria-label="Refresh captcha"
             >
-              <i class="fas fa-redo-alt"></i>
+              <span>↻</span>
               <span>Refresh</span>
             </button>
           </div>
           
-          <div class="captcha-container">
-            <div class="captcha-image">
-              <div class="captcha-loader" id="captchaLoader"></div>
-              <img 
-                id="captchaImage" 
-                alt="Security captcha image"
-                crossorigin="anonymous"
-              >
-            </div>
+          <div class="captcha-image-container">
+            <div class="captcha-loader" id="captchaLoader"></div>
+            <img 
+              id="captchaImage" 
+              alt="Security captcha"
+              crossorigin="anonymous"
+            >
           </div>
           
           <input 
@@ -666,81 +445,56 @@
           
           <input 
             type="text" 
-            id="captchaInput" 
-            class="captcha-input"
-            placeholder="Enter the characters you see"
+            id="captchaValue" 
+            class="form-input"
+            placeholder="Enter the characters above"
             required
-            aria-describedby="captchaError"
             autocomplete="off"
+            autocapitalize="off"
           >
-          <div id="captchaError" class="error-message" role="alert"></div>
+          <div id="captchaError" class="error-message"></div>
         </div>
         
         <!-- Submit Button -->
         <button 
           type="submit" 
-          class="submit-btn" 
+          class="submit-btn"
           id="submitBtn"
         >
           <span id="btnText">Sign In</span>
           <div class="btn-loader" id="btnLoader"></div>
-          <i class="fas fa-arrow-right" id="btnIcon"></i>
+          <span id="btnIcon">→</span>
         </button>
       </form>
       
       <!-- Footer -->
-      <div class="footer">
-        <p>© 2024 Cartoon Network. All rights reserved.</p>
+      <div class="login-footer">
+        <div>© 2024 System Access. All rights reserved.</div>
+        <div class="security-badge">
+          <span>🔒</span>
+          <span>Secure Connection</span>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // ============ SECURITY CONFIGURATION ============
-    // Global state to prevent race conditions
-    const securityState = {
+    // ============ STATE MANAGEMENT ============
+    const state = {
       isSubmitting: false,
       isCaptchaLoading: false,
-      lastCaptchaRequest: 0,
       loginAttempts: 0,
-      maxLoginAttempts: 5,
-      requestQueue: []
-    };
-    
-    // Request lock mechanism to prevent race conditions
-    const requestLock = {
-      isLocked: false,
-      queue: [],
-      
-      async acquire() {
-        return new Promise(resolve => {
-          if (!this.isLocked) {
-            this.isLocked = true;
-            resolve();
-          } else {
-            this.queue.push(resolve);
-          }
-        });
-      },
-      
-      release() {
-        this.isLocked = false;
-        if (this.queue.length > 0) {
-          const nextResolve = this.queue.shift();
-          this.isLocked = true;
-          nextResolve();
-        }
-      }
+      maxAttempts: 5,
+      captchaCooldown: false
     };
     
     // ============ DOM ELEMENTS ============
     const loginForm = document.getElementById('loginForm');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
-    const captchaInput = document.getElementById('captchaInput');
+    const captchaValueInput = document.getElementById('captchaValue');
     const captchaImage = document.getElementById('captchaImage');
-    const captchaKey = document.getElementById('captchaKey');
-    const captchaSection = document.getElementById('captchaSection');
+    const captchaKeyInput = document.getElementById('captchaKey');
     const captchaLoader = document.getElementById('captchaLoader');
     const refreshCaptchaBtn = document.getElementById('refreshCaptcha');
     const submitBtn = document.getElementById('submitBtn');
@@ -751,14 +505,11 @@
     const statusMessage = document.getElementById('statusMessage');
     
     // ============ UTILITY FUNCTIONS ============
-    
-    // Show status message
     function showStatus(message, type = 'error') {
       statusMessage.textContent = message;
       statusMessage.className = `status-message status-${type}`;
       statusMessage.style.display = 'block';
       
-      // Auto-hide success messages
       if (type === 'success') {
         setTimeout(() => {
           statusMessage.style.display = 'none';
@@ -766,395 +517,267 @@
       }
     }
     
-    // Hide status message
     function hideStatus() {
       statusMessage.style.display = 'none';
     }
     
-    // Show field error
     function showError(fieldId, message) {
       const field = document.getElementById(fieldId);
       const errorElement = document.getElementById(`${fieldId}Error`);
       
-      field.classList.add('error');
-      errorElement.textContent = message;
-      errorElement.style.display = 'block';
+      if (field) field.classList.add('error');
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+      }
     }
     
-    // Clear field error
     function clearError(fieldId) {
       const field = document.getElementById(fieldId);
       const errorElement = document.getElementById(`${fieldId}Error`);
       
-      field.classList.remove('error');
-      errorElement.style.display = 'none';
+      if (field) field.classList.remove('error');
+      if (errorElement) errorElement.style.display = 'none';
     }
     
-    // Validate form
     function validateForm() {
       let isValid = true;
       
-      // Clear previous errors
       clearError('username');
       clearError('password');
-      clearError('captchaInput');
+      clearError('captchaValue');
       hideStatus();
       
-      // Validate username
+      // Username validation
       if (!usernameInput.value.trim()) {
         showError('username', 'Username is required');
         isValid = false;
-      } else if (usernameInput.value.trim().length < 3) {
-        showError('username', 'Username must be at least 3 characters');
-        isValid = false;
       }
       
-      // Validate password
+      // Password validation
       if (!passwordInput.value) {
         showError('password', 'Password is required');
         isValid = false;
-      } else if (passwordInput.value.length < 6) {
-        showError('password', 'Password must be at least 6 characters');
-        isValid = false;
       }
       
-      // Validate captcha
-      if (!captchaInput.value.trim()) {
-        showError('captchaInput', 'Captcha verification is required');
+      // Captcha validation
+      if (!captchaValueInput.value.trim()) {
+        showError('captchaValue', 'Captcha is required');
         isValid = false;
       }
       
       return isValid;
     }
     
-    // Set loading state
-    function setLoadingState(isLoading) {
+    function setLoading(isLoading) {
+      state.isSubmitting = isLoading;
       submitBtn.disabled = isLoading;
-      securityState.isSubmitting = isLoading;
       
       if (isLoading) {
         btnText.style.display = 'none';
         btnLoader.style.display = 'block';
         btnIcon.style.display = 'none';
-        captchaSection.classList.add('loading');
       } else {
         btnText.style.display = 'inline';
         btnLoader.style.display = 'none';
         btnIcon.style.display = 'inline-block';
-        captchaSection.classList.remove('loading');
+      }
+    }
+    
+    function setCaptchaLoading(isLoading) {
+      state.isCaptchaLoading = isLoading;
+      refreshCaptchaBtn.disabled = isLoading;
+      
+      if (isLoading) {
+        captchaLoader.style.display = 'block';
+        refreshCaptchaBtn.innerHTML = '<span>⏳</span><span>Loading...</span>';
+      } else {
+        captchaLoader.style.display = 'none';
+        refreshCaptchaBtn.innerHTML = '<span>↻</span><span>Refresh</span>';
       }
     }
     
     // ============ CAPTCHA HANDLING ============
-    
-    // Load captcha with race condition prevention
     async function loadCaptcha() {
-      // Prevent multiple simultaneous requests
-      if (securityState.isCaptchaLoading) {
-        return;
-      }
+      if (state.isCaptchaLoading || state.captchaCooldown) return;
       
-      // Rate limiting: don't allow more than 1 request per 2 seconds
-      const now = Date.now();
-      if (now - securityState.lastCaptchaRequest < 2000) {
-        showStatus('Please wait before refreshing captcha', 'warning');
-        return;
-      }
-      
-      // Acquire lock
-      await requestLock.acquire();
-      securityState.isCaptchaLoading = true;
-      securityState.lastCaptchaRequest = now;
+      state.isCaptchaLoading = true;
+      setCaptchaLoading(true);
       
       try {
-        // Show loading state
-        captchaLoader.style.display = 'block';
-        captchaImage.style.opacity = '0.5';
-        refreshCaptchaBtn.disabled = true;
-        
-        // Fetch captcha from API
         const response = await fetch('/api/captcha/', {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache'
-          },
-          credentials: 'same-origin'
+            'Cache-Control': 'no-cache'
+          }
         });
         
         if (!response.ok) {
-          throw new Error(`Captcha API responded with status: ${response.status}`);
+          throw new Error('Failed to load captcha');
         }
         
         const data = await response.json();
         
-        // Validate response
-        if (!data.captcha_image || !data.captcha_key) {
-          throw new Error('Invalid captcha response format');
+        if (data.captcha_image && data.captcha_key) {
+          captchaImage.src = data.captcha_image;
+          captchaKeyInput.value = data.captcha_key;
+          captchaValueInput.value = '';
+          clearError('captchaValue');
         }
         
-        // Update captcha image and key
-        captchaImage.src = data.captcha_image;
-        captchaKey.value = data.captcha_key;
-        
-        // Clear captcha input
-        captchaInput.value = '';
-        
-        // Show image after load
-        captchaImage.onload = () => {
-          captchaImage.style.opacity = '1';
-          captchaLoader.style.display = 'none';
-        };
-        
-        // Handle image load error
-        captchaImage.onerror = () => {
-          captchaLoader.style.display = 'none';
-          showStatus('Failed to load captcha image', 'error');
-          captchaImage.src = '';
-        };
-        
       } catch (error) {
-        console.error('Captcha loading error:', error);
-        showStatus('Failed to load security verification. Please try again.', 'error');
-        captchaLoader.style.display = 'none';
-        captchaImage.style.opacity = '1';
+        console.error('Captcha error:', error);
+        showStatus('Failed to load security image', 'error');
       } finally {
-        // Release lock and reset state
-        refreshCaptchaBtn.disabled = false;
-        securityState.isCaptchaLoading = false;
-        requestLock.release();
+        state.isCaptchaLoading = false;
+        setCaptchaLoading(false);
+        
+        // Cooldown to prevent rapid refreshes
+        state.captchaCooldown = true;
+        setTimeout(() => {
+          state.captchaCooldown = false;
+        }, 1000);
       }
     }
     
     // ============ LOGIN HANDLING ============
-    
-    // Handle login submission
     async function handleLogin(event) {
       event.preventDefault();
       
-      // Check if already submitting
-      if (securityState.isSubmitting) {
-        showStatus('Please wait for the current request to complete', 'warning');
+      if (state.isSubmitting) {
+        showStatus('Please wait...', 'warning');
         return;
       }
       
-      // Check login attempts
-      if (securityState.loginAttempts >= securityState.maxLoginAttempts) {
-        showStatus('Too many failed attempts. Please try again later.', 'error');
+      if (state.loginAttempts >= state.maxAttempts) {
+        showStatus('Too many attempts. Please try again later.', 'error');
         return;
       }
       
-      // Validate form
       if (!validateForm()) {
-        securityState.loginAttempts++;
+        state.loginAttempts++;
         return;
       }
       
-      // Set loading state
-      setLoadingState(true);
+      setLoading(true);
       hideStatus();
       
-      // Prepare login data
       const loginData = {
         username: usernameInput.value.trim(),
         password: passwordInput.value,
-        captcha_key: captchaKey.value,
-        captcha_value: captchaInput.value.trim()
+        captcha_key: captchaKeyInput.value,
+        captcha_value: captchaValueInput.value.trim()
       };
       
       try {
-        // Make login request
         const response = await fetch('/api/auth/login/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
+            'Accept': 'application/json'
           },
-          body: JSON.stringify(loginData),
-          credentials: 'same-origin'
+          body: JSON.stringify(loginData)
         });
         
-        // Handle response
         const data = await response.json();
         
         if (response.ok) {
-          // Login successful
-          handleLoginSuccess(data);
+          // Store tokens
+          if (data.access) localStorage.setItem('access', data.access);
+          if (data.refresh) localStorage.setItem('refresh', data.refresh);
+          
+          showStatus('Login successful!', 'success');
+          state.loginAttempts = 0;
+          
+          // Redirect
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 1500);
+          
         } else {
-          // Login failed
           handleLoginError(response.status, data);
         }
         
       } catch (error) {
-        // Network or other errors
         console.error('Login error:', error);
-        showStatus('Network error. Please check your connection.', 'error');
-        securityState.loginAttempts++;
+        showStatus('Network error. Please try again.', 'error');
+        state.loginAttempts++;
         
-        // Refresh captcha on network error
+        // Reload captcha on network error
         setTimeout(loadCaptcha, 1000);
       } finally {
-        // Reset loading state
-        setLoadingState(false);
+        setLoading(false);
       }
     }
     
-    // Handle successful login
-    function handleLoginSuccess(data) {
-      // Store tokens securely
-      if (data.access) {
-        localStorage.setItem('access', data.access);
-      }
-      if (data.refresh) {
-        localStorage.setItem('refresh', data.refresh);
-      }
-      
-      // Show success message
-      showStatus('Login successful! Redirecting...', 'success');
-      
-      // Reset login attempts
-      securityState.loginAttempts = 0;
-      
-      // Redirect to home page
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 1500);
-    }
-    
-    // Handle login error
     function handleLoginError(status, data) {
-      securityState.loginAttempts++;
+      state.loginAttempts++;
       
-      switch (status) {
-        case 400:
-          if (data.captcha_error) {
-            showStatus('Invalid security verification. Please try again.', 'error');
-            showError('captchaInput', data.captcha_error);
-            loadCaptcha(); // Refresh captcha on failure
-          } else if (data.non_field_errors) {
-            showStatus(data.non_field_errors[0], 'error');
-          } else {
-            showStatus('Invalid credentials or verification', 'error');
-          }
-          break;
-          
-        case 401:
-          showStatus('Authentication failed. Please check your credentials.', 'error');
-          break;
-          
-        case 403:
-          showStatus('Access denied. Too many failed attempts.', 'error');
-          break;
-          
-        case 429:
-          showStatus('Too many requests. Please wait before trying again.', 'error');
-          break;
-          
-        default:
-          showStatus('Login failed. Please try again.', 'error');
+      if (status === 400) {
+        if (data.captcha_error) {
+          showStatus('Invalid captcha. Please try again.', 'error');
+          showError('captchaValue', data.captcha_error);
+          loadCaptcha();
+        } else if (data.non_field_errors) {
+          showStatus(data.non_field_errors[0], 'error');
+        } else {
+          showStatus('Invalid credentials', 'error');
+        }
+      } else if (status === 401) {
+        showStatus('Authentication failed', 'error');
+      } else if (status === 429) {
+        showStatus('Too many attempts. Please wait.', 'error');
+      } else {
+        showStatus('Login failed', 'error');
       }
-      
-      // Refresh captcha on any error
-      setTimeout(loadCaptcha, 500);
     }
     
     // ============ EVENT LISTENERS ============
-    
-    // Form submission
     loginForm.addEventListener('submit', handleLogin);
     
-    // Password visibility toggle
     togglePasswordBtn.addEventListener('click', () => {
       const type = passwordInput.type === 'password' ? 'text' : 'password';
       passwordInput.type = type;
-      
-      // Update icon
-      const icon = togglePasswordBtn.querySelector('i');
-      icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
-      
-      // Update aria label
+      togglePasswordBtn.textContent = type === 'password' ? '👁️' : '🙈';
       togglePasswordBtn.setAttribute('aria-label', 
         type === 'password' ? 'Show password' : 'Hide password'
       );
     });
     
-    // Refresh captcha button
     refreshCaptchaBtn.addEventListener('click', loadCaptcha);
     
-    // Real-time validation
+    // Clear errors on input
     usernameInput.addEventListener('input', () => clearError('username'));
     passwordInput.addEventListener('input', () => clearError('password'));
-    captchaInput.addEventListener('input', () => clearError('captchaInput'));
+    captchaValueInput.addEventListener('input', () => clearError('captchaValue'));
     
-    // Prevent form submission on Enter in captcha field (allow it only for form submit)
-    captchaInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !securityState.isSubmitting) {
+    // Auto-submit on Enter in captcha
+    captchaValueInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !state.isSubmitting) {
         loginForm.requestSubmit();
       }
     });
     
     // ============ INITIALIZATION ============
-    
-    // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
-      // Load initial captcha
       loadCaptcha();
       
-      // Auto-focus username field
+      // Focus username after a short delay
       setTimeout(() => {
         usernameInput.focus();
       }, 300);
-      
-      // Add subtle animation to inputs on focus
-      document.querySelectorAll('.input-field').forEach(input => {
-        input.addEventListener('focus', function() {
-          this.parentElement.style.transform = 'translateY(-2px)';
-        });
-        
-        input.addEventListener('blur', function() {
-          this.parentElement.style.transform = 'translateY(0)';
-        });
-      });
     });
     
-    // Handle page visibility change (prevents issues with background tabs)
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && !captchaKey.value) {
-        // Reload captcha if page becomes visible and captcha is empty
-        setTimeout(loadCaptcha, 100);
-      }
+    // Handle image load errors
+    captchaImage.addEventListener('error', () => {
+      captchaImage.style.display = 'none';
+      showStatus('Failed to load captcha image', 'error');
     });
     
-    // Clean up on page unload
-    window.addEventListener('beforeunload', () => {
-      securityState.isSubmitting = false;
-      securityState.isCaptchaLoading = false;
+    captchaImage.addEventListener('load', () => {
+      captchaImage.style.display = 'block';
     });
-    
-    // ============ SECURITY ENHANCEMENTS ============
-    
-    // Protect against XSS in inputs
-    function sanitizeInput(input) {
-      const div = document.createElement('div');
-      div.textContent = input;
-      return div.innerHTML;
-    }
-    
-    // Apply sanitization to all inputs
-    document.querySelectorAll('input').forEach(input => {
-      input.addEventListener('change', function() {
-        this.value = sanitizeInput(this.value);
-      });
-    });
-    
-    // Logout function (if needed elsewhere)
-    window.logout = function() {
-      localStorage.removeItem('access');
-      localStorage.removeItem('refresh');
-      window.location.href = '/login';
-    };
   </script>
 </body>
 </html>
