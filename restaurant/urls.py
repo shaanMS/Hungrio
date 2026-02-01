@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 from checkout_and_billing.views import checkout_view
 from django.conf.urls.static import static
 from accounts.CaptchaView import CaptchaTokenView 
-from accounts.CustomLoginView import LoginPageView
+from accounts.LoginPageView import LoginPageView
 from accounts.CaptchaView import CaptchaAPIView
 
 def test_root(request):
