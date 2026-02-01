@@ -11,7 +11,8 @@ class CaptchaAPIView(APIView):
 
     def get(self, request):
         key = CaptchaStore.generate_key()
-        full_image_url = request.build_absolute_uri(image_url)
+        relative_image_url = captcha_image_url(key)  # yeh /captcha/image/xxx/ deta hai
+        full_image_url = request.build_absolute_uri(relative_image_url)
         return Response({
             "captcha_key": key,
             "captcha_image": full_image_url,
