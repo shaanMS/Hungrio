@@ -66,7 +66,9 @@ class CaptchaJWTSerializer(TokenObtainPairSerializer):
         # 🔐 Captcha validation
         try:
             captcha = CaptchaStore.objects.get(hashkey=captcha_key)
-            if captcha.response != captcha_value:
+            print('------->>>>>>>>>--------------',captcha.response.strip().lower())
+            print('-------------<><><><<><><><><>>----',captcha_value.strip().lower())
+            if captcha.response.strip().lower() != captcha_value.strip().lower():
                 raise serializers.ValidationError("Invalid captcha")
             captcha.delete()   # 🔥 one-time use
         except CaptchaStore.DoesNotExist:
@@ -74,7 +76,6 @@ class CaptchaJWTSerializer(TokenObtainPairSerializer):
        
         # if captcha.response.lower() != captcha_value.lower():
         #     raise serializers.ValidationError("Invalid captcha")
-        if captcha.response.strip().lower() != captcha_value.strip().lower():
-         raise serializers.ValidationError("Invalid captcha")
+       
         # captcha.delete()  # ✅ one-time use
         return super().validate(attrs)
