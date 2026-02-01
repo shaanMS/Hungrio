@@ -8,9 +8,14 @@ async function login()
   const res = await fetch("/api/auth/login/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password ,captchaKey, captchaValue})
+  //   body: JSON.stringify({ username, password ,captchaKey, captchaValue})
+  // });
+    body: JSON.stringify({
+    username,
+    password,
+    captcha_key: captchaKey,
+    captcha_value: captchaValue
   });
-
   if (!res.ok) 
     {
     alert("Login failed");
