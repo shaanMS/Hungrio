@@ -105,6 +105,11 @@ async function loadCaptcha() {
     document.getElementById("captcha-img").src = data.captcha_image;
     document.getElementById("captcha_key").value = data.captcha_key;
     document.getElementById("captcha_value").value = ""; // clear old input
+
+
+    // for dbugging
+    imgElement.onload = () => console.log("Captcha image loaded successfully!");
+    imgElement.onerror = () => console.log("Captcha image failed to load!");
   } catch (error) {
     console.error("Captcha error:", error);
   }
