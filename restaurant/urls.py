@@ -12,6 +12,7 @@ from checkout_and_billing.views import checkout_view
 from django.conf.urls.static import static
 from accounts.CaptchaView import CaptchaTokenView 
 from accounts.CustomLoginView import LoginPageView
+from accounts.CaptchaView import CaptchaAPIView
 
 def test_root(request):
     return HttpResponse("<h1>Django server is running on Railway! Test successful.</h1>")
@@ -24,7 +25,7 @@ urlpatterns = [
     # ---------- UI PAGES ----------
     path('', TemplateView.as_view(template_name='index.html'), name='home'),   # HOME
     # path('login/', TemplateView.as_view(template_name='login.html'), name='login'),
-    path('login/',LoginPageView.as_view(), name="login"),
+    path('login/',LoginPageView.as_view(), name="login"),#v
     path("cart/", TemplateView.as_view(template_name="cart.html"), name="cart"),
     path("wishlist/", TemplateView.as_view(template_name="wishlist.html")),
     path("checkout/", checkout_view, name="checkout"),   # ✅ FIXED
@@ -41,13 +42,13 @@ urlpatterns = [
     'api/auth/login/',
     CaptchaTokenView.as_view(),
     name='token_obtain_pair'
-),
+),#v
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('account/', include('accounts.urls')),   # account/api/auth/me/
     path("api/checkout/", include("checkout_and_billing.urls")),
     path("api/order-payment/", include("order_payment.urls")),
-    path('captcha/', include('captcha.urls')),
-    path("api/", CaptchaAPIView.as_view()),
+    #path('captcha/', include('captcha.urls')),#use in caseof mvtpure not in case of api
+    path("api/captcha/", CaptchaAPIView.as_view()), #v
 
     # ---------- APP APIs ----------
     path('api/products/', include('product.urls')),
