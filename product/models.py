@@ -2,8 +2,13 @@ from django.contrib.postgres.fields import JSONField  # Django 5+ me models.JSON
 from django.db import models
 import uuid
 from category.models import Category, SubCategory   # ← ये लाइन जोड़ो
+
+
+
 # product/models.py
 class Product(models.Model):
+    
+    
     id = models.BigAutoField(primary_key=True)  # Matches your current integer PK
     
     category = models.ForeignKey(

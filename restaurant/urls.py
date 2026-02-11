@@ -19,7 +19,7 @@ def test_root(request):
 
 
 urlpatterns = [
-    #path('', test_root, name='test_root'),  # root URL पर simple text
+    #path('', test_root, name='test_root'),  # root URL par simple text
     path('admin/', admin.site.urls),
 
     # ---------- UI PAGES ----------

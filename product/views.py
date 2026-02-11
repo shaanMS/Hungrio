@@ -19,13 +19,14 @@ class ProductListAPI(generics.ListAPIView):
     """
     GET /api/products/
     """
+
+    permission_classes = [AllowAny]
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
-   # permission_classes = [permissions.IsAuthenticated]
     pagination_class = DefaultPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['category', 'subcategory', 'is_veg']
-    permission_classes = [AllowAny]
+    
 
 
     
