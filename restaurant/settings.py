@@ -28,6 +28,7 @@ ALLOWED_HOSTS = [
 
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://hungrio-production-4564.up.railway.app',
     'https://hungrio-production.up.railway.app',
     'https://*.up.railway.app',
 ]
