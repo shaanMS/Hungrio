@@ -754,7 +754,7 @@
         }
 
         const data = await response.json();
-        
+        console.log('====================\n  ',data)
         // Check if we have data
         if (!data.data || data.data.length === 0) {
           showEmptyState();
@@ -789,7 +789,7 @@
       items.forEach(item => {
         const product = item.product;
         if (!product) return;
-
+        console.log(product
         const isAvailable = true; // You can add availability logic
         const addedDate = new Date(item.added_at);
         const daysSinceAdded = Math.floor((new Date() - addedDate) / (1000 * 60 * 60 * 24));
@@ -807,6 +807,7 @@
               
               <div class="item-details">
                 <div class="item-price">₹${product.price || '0'}</div>
+                console.log('** * * * * =  === ***      ',product.is_veg )
                 <div class="item-veg ${product.is_veg ? 'veg' : 'non-veg'}">
                   ${product.is_veg ? '🥬 Veg' : '🍗 Non-Veg'}
                 </div>
