@@ -252,6 +252,85 @@ CELERY_TIMEZONE = "Asia/Kolkata"
 # CONTENT SECURITY POLICY (FULL – COPY & PASTE)
 # --------------------------------------------------
 
+# CONTENT_SECURITY_POLICY = {
+#     "DIRECTIVES": {
+
+#         # Default
+#         "default-src": [
+#             "'self'",
+#         ],
+
+#         # JavaScript
+#         "script-src": [
+#             "'self'",
+#             "https://js.stripe.com",
+#             "'unsafe-inline'",   # HTML onclick / inline scripts (later remove)
+#         ],
+
+#         # CSS
+#         "style-src": [
+#             "'self'",
+#             "'unsafe-inline'",
+#             "https://fonts.googleapis.com",
+#             "https://cdnjs.cloudflare.com",
+#         ],
+
+#         # Fonts
+#         "font-src": [
+#             "'self'",
+#             "https://fonts.gstatic.com",
+#             "https://cdnjs.cloudflare.com",
+#         ],
+
+#         # Images / Icons
+#         "img-src": [
+#             "'self'",
+#             "data:",
+#             "blob:",
+#         ],
+
+#         # Stripe iframe / checkout
+#         "frame-src": [
+#             "https://js.stripe.com",
+#         ],
+
+#         # API / AJAX / Fetch / WebSocket
+#         "connect-src": [
+#             "'self'",
+#              "https://cdnjs.cloudflare.com"
+#             "https://hungrio-production.up.railway.app",
+#             "https://api.stripe.com",
+#             "wss://hungrio-production.up.railway.app",
+#         ],
+
+#         # Forms (POST, login, payment)
+#         "form-action": [
+#             "'self'",
+#             "https://api.stripe.com",
+#         ],
+
+#         # Media (future-proof)
+#         "media-src": [
+#             "'self'",
+#         ],
+
+#         # Objects (disable Flash etc.)
+#         "object-src": [
+#             "'none'",
+#         ],
+
+#         # Base URI
+#         "base-uri": [
+#             "'self'",
+#         ],
+
+#         # Clickjacking protection
+#         "frame-ancestors": [
+#             "'self'",
+#         ],
+#     }
+# }
+
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
 
@@ -264,7 +343,8 @@ CONTENT_SECURITY_POLICY = {
         "script-src": [
             "'self'",
             "https://js.stripe.com",
-            "'unsafe-inline'",   # HTML onclick / inline scripts (later remove)
+            "https://cdnjs.cloudflare.com",
+            "'unsafe-inline'",   # later remove if possible
         ],
 
         # CSS
@@ -282,44 +362,51 @@ CONTENT_SECURITY_POLICY = {
             "https://cdnjs.cloudflare.com",
         ],
 
-        # Images / Icons
+        # Images
         "img-src": [
             "'self'",
             "data:",
             "blob:",
         ],
 
-        # Stripe iframe / checkout
+        # Stripe iframe
         "frame-src": [
             "https://js.stripe.com",
         ],
 
-        # API / AJAX / Fetch / WebSocket
+        # 🔥 MOST IMPORTANT (API / AJAX / WebSocket)
         "connect-src": [
             "'self'",
-             "https://cdnjs.cloudflare.com"
-            "https://hungrio-production.up.railway.app",
+            "https://cdnjs.cloudflare.com",
             "https://api.stripe.com",
+
+            # Railway domains
+            "https://hungrio-production.up.railway.app",
+            "https://hungrio-production-4564.up.railway.app",
+            "https://*.up.railway.app",
+
+            # WebSocket (channels)
             "wss://hungrio-production.up.railway.app",
+            "wss://*.up.railway.app",
         ],
 
-        # Forms (POST, login, payment)
+        # Forms (login / payment)
         "form-action": [
             "'self'",
             "https://api.stripe.com",
         ],
 
-        # Media (future-proof)
+        # Media
         "media-src": [
             "'self'",
         ],
 
-        # Objects (disable Flash etc.)
+        # Disable plugins
         "object-src": [
             "'none'",
         ],
 
-        # Base URI
+        # Base URL
         "base-uri": [
             "'self'",
         ],
