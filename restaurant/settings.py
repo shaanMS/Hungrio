@@ -299,7 +299,7 @@ CONTENT_SECURITY_POLICY = {
         # API / AJAX / Fetch / WebSocket
         "connect-src": [
             "'self'",
-             "https://cdnjs.cloudflare.com"
+             "https://cdnjs.cloudflare.com",
             "https://hungrio-production.up.railway.app",
             "https://api.stripe.com",
             "wss://hungrio-production.up.railway.app",
