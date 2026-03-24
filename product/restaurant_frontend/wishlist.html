@@ -789,7 +789,7 @@
       items.forEach(item => {
         const product = item.product;
         if (!product) return;
-        console.log(product
+        console.log(product,"   ============================");
         const isAvailable = true; // You can add availability logic
         const addedDate = new Date(item.added_at);
         const daysSinceAdded = Math.floor((new Date() - addedDate) / (1000 * 60 * 60 * 24));
