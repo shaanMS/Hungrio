@@ -18,8 +18,8 @@ if not SECRET_KEY:
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
-    'https://hungrio-production-4564.up.railway.app',
-    'hungrio-production.up.railway.app',
+    'hungrio-production-4564.up.railway.app',
+    # 'hungrio-production.up.railway.app',
     '.up.railway.app',          # wildcard for Railway subdomains
     'localhost',
     '127.0.0.1',
