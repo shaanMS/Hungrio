@@ -18,6 +18,7 @@ if not SECRET_KEY:
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
+    'https://hungrio-production-4564.up.railway.app',
     'hungrio-production.up.railway.app',
     '.up.railway.app',          # wildcard for Railway subdomains
     'localhost',
@@ -192,8 +193,9 @@ SIMPLE_JWT = {
 # --------------------------------------------------
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "https://hungrio-production.up.railway.app",
     "https://hungrio-production-4564.up.railway.app",
+    "https://hungrio-production.up.railway.app",
+    
     "http://localhost:3000",  # अगर frontend local में है
     # और भी origins ऐड कर सकते हो
 ]
