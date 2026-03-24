@@ -385,8 +385,9 @@ CONTENT_SECURITY_POLICY = {
             "https://api.stripe.com",
 
             # Railway domains
+             "https://hungrio-production-4564.up.railway.app",
             "https://hungrio-production.up.railway.app",
-            "https://hungrio-production-4564.up.railway.app",
+           
             "https://*.up.railway.app",
 
             # WebSocket (channels)
