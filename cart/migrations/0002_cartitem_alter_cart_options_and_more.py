@@ -7,7 +7,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
+    dependeoncies = [
         ("cart", "0001_initial"),
         ("product", "0001_initial"),
     ]
