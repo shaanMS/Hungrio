@@ -8,8 +8,9 @@ from captcha.helpers import captcha_image_url
 
 class CaptchaAPIView(APIView):
     permission_classes = [AllowAny]
-
+    
     def get(self, request):
+        print()
         key = CaptchaStore.generate_key()
         relative_image_url = captcha_image_url(key)  # yeh /captcha/image/xxx/ deta hai
         full_image_url = request.build_absolute_uri(relative_image_url)
