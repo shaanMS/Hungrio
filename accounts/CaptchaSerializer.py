@@ -2,7 +2,7 @@
 # # from captcha.models import CaptchaStore
 # # from captcha.helpers import captcha_image_url
 # # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
+ 
 # # class CaptchaJWTSerializer(TokenObtainPairSerializer):
 # #     captcha_key = serializers.CharField()
 # #     captcha_value = serializers.CharField()
